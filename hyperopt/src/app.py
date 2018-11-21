@@ -21,10 +21,10 @@ pipeline:
     trainer = Trainer(config)
     # temporary hack around nlu bug
     trainer.pipeline[1].epochs = round(x)
-    training_data = load_data('./hyperopt/data/train.md')
+    training_data = load_data('/hyperopt/data/train.md')
     model = trainer.train(training_data)
     model.model_metadata = Metadata({"language": "en"}, ".")
-    evaluation = run_evaluation('./hyperopt/data/test.md', model)
+    evaluation = run_evaluation('/hyperopt/data/test.md', model)
     intent_f1 = evaluation['intent_evaluation']['f1_score']
     return {'loss': 1-intent_f1, 'status': STATUS_OK }
 
