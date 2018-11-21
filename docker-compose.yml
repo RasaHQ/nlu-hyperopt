@@ -19,6 +19,7 @@ services:
     volumes:
       - ./hyperopt/src:/hyperopt/
       - ./hyperopt/data:/hyperopt/data/
+      - ./hyperopt/models:/hyperopt/models/
   hyperopt-mongo-worker:
     build:
       context: ./hyperopt
@@ -33,3 +34,4 @@ services:
     volumes:
       - ./hyperopt-mongo-worker/:/hyperopt/
       - ./hyperopt/data:/hyperopt/data/
+      - ./hyperopt/models:/hyperopt/models/
