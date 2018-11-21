@@ -16,6 +16,7 @@ services:
     container_name: "hyperopt"
     volumes:
       - ./hyperopt/src:/hyperopt/
+      - ./hyperopt/data:/data/
   hyperopt-mongo-worker:
     build:
       context: ./hyperopt
