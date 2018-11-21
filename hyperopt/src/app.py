@@ -27,11 +27,10 @@ def objective(x):
     intent_f1 = evaluation['intent_evaluation']['f1']
     return {'loss': 1-intent_f1, 'status': STATUS_OK }
 
-if __name__ == "__main__":
-    print("starting process")
-    space = hp.loguniform('epochs', 1, 200)
-    trials = MongoTrials('mongo://mongodb:27017/foo_db/jobs', exp_key='exp3')
-    best = fmin(objective, space, trials=trials, algo=tpe.suggest, max_evals=100)
+print("starting process")
+space = hp.loguniform('epochs', 1, 200)
+trials = MongoTrials('mongo://mongodb:27017/foo_db/jobs', exp_key='exp3')
+best = fmin(objective, space, trials=trials, algo=tpe.suggest, max_evals=100)
 
-    print(best)
-    print(space_eval(space, best))
+print(best)
+print(space_eval(space, best))
