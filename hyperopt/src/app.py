@@ -19,9 +19,9 @@ pipeline:
     config = read_yaml(config_yml)
     config = RasaNLUModelConfig(config)
     trainer = Trainer(config)
-    training_data = load_data('data/train.md')
+    training_data = load_data('/hyperopt/data/train.md')
     interpreter = trainer.train(training_data)
-    evaluation = run_evaluation('data/test.md', interpreter)
+    evaluation = run_evaluation('/hyperopt/data/test.md', interpreter)
     intent_f1 = evaluation['intent_evaluation']['f1']
     return {'loss': 1-intent_f1, 'status': STATUS_OK }
 
