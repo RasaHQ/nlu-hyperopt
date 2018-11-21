@@ -1,4 +1,4 @@
-FROM rasa/rasa_nlu:0.14.0a1-tensorflow
+FROM rasa/rasa_nlu:latest-tensorflow
 
 RUN mkdir -p /hyperopt
 WORKDIR /hyperopt
