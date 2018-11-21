@@ -6,20 +6,17 @@ from rasa_nlu.config import RasaNLUModelConfig
 from rasa_nlu.utils import read_yaml
 from rasa_nlu.evaluate import run_evaluation
 
-def create_config(epochs):
+
+def objective(x):
     config_yml = """
 language: en
 pipeline:
 - name: "intent_featurizer_count_vectors"
 - name: "intent_classifier_tensorflow_embedding"
   "epochs": {}
-""".format(epochs)
+""".format(x)
     config = read_yaml(config_yml)
-    return RasaNLUModelConfig(config)
-
-
-def objective(x):
-    config = create_config(x)
+    config = RasaNLUModelConfig(config)
     trainer = Trainer(config)
     training_data = load_data('data/train.md')
     interpreter = trainer.train(training_data)
