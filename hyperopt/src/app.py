@@ -25,7 +25,7 @@ pipeline:
     training_data = load_data('/hyperopt/data/train.md')
     model = trainer.train(training_data)
     model_path = trainer.persist('/hyperopt/models')
-    evaluation = run_evaluation('/hyperopt/data/test.md', model_path)
+    evaluation = run_evaluation('/hyperopt/data/test.md', model_path, confmat_filename=None)
     intent_f1 = evaluation['intent_evaluation']['f1_score']
     os.rmdir(model_path)
     return {'loss': 1-intent_f1, 'status': STATUS_OK }
