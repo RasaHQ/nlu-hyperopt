@@ -32,3 +32,4 @@ services:
     command: ["hyperopt-mongo-worker", "--mongo=mongodb:27017/foo_db", "--poll-interval=0.1"]
     volumes:
       - ./hyperopt-mongo-worker/:/hyperopt/
+      - ./hyperopt/data:/data/
