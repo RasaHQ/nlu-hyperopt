@@ -1,4 +1,4 @@
-FROM continuumio/miniconda
+FROM rasa/rasa_nlu:0.13.8-tensorflow
 
 RUN mkdir -p /hyperopt
 WORKDIR /hyperopt
