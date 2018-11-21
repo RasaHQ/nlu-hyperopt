@@ -1,0 +1,5 @@
+---
+- name: Run docker.ubuntu
+  hosts: docker
+  roles:
+    - angstwad.docker_ubuntu

@@ -1,0 +1,31 @@
+version: "3"
+services:
+  mongodb:
+    image: "mongo"
+    ports:
+    - "27017:27017"
+    container_name: "mongodb"
+  hyperopt:
+    build:
+      context: ./hyperopt
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
+    container_name: "hyperopt"
+    volumes:
+      - ./hyperopt/src:/hyperopt/
+  hyperopt-mongo-worker:
+    build:
+      context: ./hyperopt
+      dockerfile: Dockerfile
+    depends_on:
+      - hyperopt
+      - mongodb
+    links:
+      - mongodb
+    container_name: "hyperopt-mongo-worker"
+    command: ["hyperopt-mongo-worker", "--mongo=mongodb:27017/foo_db", "--poll-interval=0.1"]
+    volumes:
+- ./hyperopt-mongo-worker/:/hyperopt/
