@@ -7,6 +7,7 @@ def objective(x):
     from rasa_nlu.config import RasaNLUModelConfig
     from rasa_nlu.utils import read_yaml
     from rasa_nlu.evaluate import run_evaluation
+    from rasa_nlu.model import Trainer
 
     config_yml = """
 language: en
