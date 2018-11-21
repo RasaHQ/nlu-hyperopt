@@ -1,13 +1,13 @@
 import math
 from hyperopt import fmin, tpe, hp, space_eval
 from hyperopt.mongoexp import MongoTrials
-from rasa_nlu.training_data import load_data
-from rasa_nlu.config import RasaNLUModelConfig
-from rasa_nlu.utils import read_yaml
-from rasa_nlu.evaluate import run_evaluation
-
 
 def objective(x):
+    from rasa_nlu.training_data import load_data
+    from rasa_nlu.config import RasaNLUModelConfig
+    from rasa_nlu.utils import read_yaml
+    from rasa_nlu.evaluate import run_evaluation
+
     config_yml = """
 language: en
 pipeline:
