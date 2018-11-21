@@ -15,7 +15,7 @@ pipeline:
 - name: "intent_featurizer_count_vectors"
 - name: "intent_classifier_tensorflow_embedding"
   "epochs": {}
-""".format(x)
+""".format(round(x))
     config = read_yaml(config_yml)
     config = RasaNLUModelConfig(config)
     trainer = Trainer(config)
