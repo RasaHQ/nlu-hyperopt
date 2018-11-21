@@ -5,5 +5,6 @@ WORKDIR /hyperopt
 
 RUN conda install -c jaikumarm hyperopt
 RUN conda install -c anaconda flask 
+RUN pip install -r requirements.txt
 
 CMD ["python", "app.py"]
