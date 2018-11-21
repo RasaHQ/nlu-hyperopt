@@ -1,5 +1,5 @@
 import math
-from hyperopt import fmin, tpe, hp, space_eval
+from hyperopt import fmin, tpe, hp, space_eval, STATUS_OK
 from hyperopt.mongoexp import MongoTrials
 
 def objective(x):
@@ -7,7 +7,7 @@ def objective(x):
     from rasa_nlu.config import RasaNLUModelConfig
     from rasa_nlu.utils import read_yaml
     from rasa_nlu.evaluate import run_evaluation
-    from rasa_nlu.model import Trainer
+    from rasa_nlu.model import Trainer, Interpreter, Metadata
 
     config_yml = """
 language: en
@@ -19,10 +19,13 @@ pipeline:
     config = read_yaml(config_yml)
     config = RasaNLUModelConfig(config)
     trainer = Trainer(config)
-    training_data = load_data('/hyperopt/data/train.md')
-    interpreter = trainer.train(training_data)
-    evaluation = run_evaluation('/hyperopt/data/test.md', interpreter)
-    intent_f1 = evaluation['intent_evaluation']['f1']
+    # temporary hack around nlu bug
+    trainer.pipeline[1].epochs = round(x)
+    training_data = load_data('./hyperopt/data/train.md')
+    model = trainer.train(training_data)
+    model.model_metadata = Metadata({"language": "en"}, ".")
+    evaluation = run_evaluation('./hyperopt/data/test.md', model)
+    intent_f1 = evaluation['intent_evaluation']['f1_score']
     return {'loss': 1-intent_f1, 'status': STATUS_OK }
 
 print("starting process")
