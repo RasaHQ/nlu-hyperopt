@@ -26,7 +26,7 @@ pipeline:
     return {'loss': 1-intent_f1, 'status': STATUS_OK }
 
 print("starting process")
-space = hp.qloguniform('epochs', 1, 200, 2)
+space = hp.qloguniform('epochs', 0, 4, 2)
 trials = MongoTrials('mongo://mongodb:27017/foo_db/jobs', exp_key='exp3')
 best = fmin(objective, space, trials=trials, algo=tpe.suggest, max_evals=100)
 
