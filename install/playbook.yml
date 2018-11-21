@@ -1,5 +1,6 @@
 ---
-- name: Run docker.ubuntu
-  hosts: docker
+- name: "Configure app server"
+  hosts: "localhost"
+  become: True
   roles:
-    - angstwad.docker_ubuntu
+  - angstwad.docker_ubuntu
