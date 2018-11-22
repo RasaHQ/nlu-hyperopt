@@ -22,7 +22,7 @@ pipeline:
     config = RasaNLUModelConfig(config)
     trainer = Trainer(config)
     # temporary hack around nlu bug
-    trainer.pipeline[1].epochs = int(space['epochs']))
+    trainer.pipeline[1].epochs = int(space['epochs'])
     trainer.pipeline[0].max_df = float(space['max_df'])
     trainer.pipeline[0].max_ngram = int(space['max_ngram'])
     training_data = load_data('/hyperopt/data/train.md')
