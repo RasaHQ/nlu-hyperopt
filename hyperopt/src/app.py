@@ -2,7 +2,7 @@ import math
 from hyperopt import fmin, tpe, hp, space_eval
 from hyperopt.mongoexp import MongoTrials
 
-def objective(args):
+def objective(*args):
     from hyperopt import STATUS_OK
     from rasa_nlu.training_data import load_data
     from rasa_nlu.config import RasaNLUModelConfig
@@ -17,12 +17,12 @@ pipeline:
 - name: "intent_featurizer_count_vectors"
 - name: "intent_classifier_tensorflow_embedding"
   epochs: {}
-""".format(round(x))
+""".format(round(epochs))
     config = read_yaml(config_yml)
     config = RasaNLUModelConfig(config)
     trainer = Trainer(config)
     # temporary hack around nlu bug
-    trainer.pipeline[1].epochs = round(x)
+    trainer.pipeline[1].epochs = round(epochs)
     trainer.pipeline[0].max_df = max_df
     trainer.pipeline[0].max_ngram = max_ngram
     training_data = load_data('/hyperopt/data/train.md')
@@ -31,6 +31,7 @@ pipeline:
     evaluation = run_evaluation('/hyperopt/data/test.md', model_path, confmat_filename=None)
     intent_f1 = evaluation['intent_evaluation']['f1_score']
     return {'loss': 1-intent_f1, 'status': STATUS_OK }
+
 
 print("starting process")
 space = [
