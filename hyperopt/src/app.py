@@ -8,7 +8,6 @@ def objective(x):
     from rasa_nlu.utils import read_yaml
     from rasa_nlu.evaluate import run_evaluation
     from rasa_nlu.model import Trainer, Interpreter, Metadata
-    import os
 
     config_yml = """
 language: en
@@ -27,7 +26,6 @@ pipeline:
     model_path = trainer.persist('/hyperopt/models')
     evaluation = run_evaluation('/hyperopt/data/test.md', model_path, confmat_filename=None)
     intent_f1 = evaluation['intent_evaluation']['f1_score']
-    os.rmdir(model_path)
     return {'loss': 1-intent_f1, 'status': STATUS_OK }
 
 print("starting process")
