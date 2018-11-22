@@ -39,7 +39,7 @@ space = {
     'max_df': hp.loguniform('max_df', -10, 0),
     'max_ngram': hp.qloguniform('max_ngram', 0, 2, 1)
 }
-trials = MongoTrials('mongo://mongodb:27017/foo_db/jobs', exp_key='exp3')
+trials = MongoTrials('mongo://mongodb:27017/foo_db/jobs', exp_key='exp4')
 best = fmin(objective, space, trials=trials, algo=tpe.suggest, max_evals=100)
 
 print(best)
