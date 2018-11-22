@@ -34,10 +34,11 @@ pipeline:
 
 
 print("starting process")
-space = [
-    hp.qloguniform('epochs', 0, 4, 2),
-    hp.loguniform('max_df', -10, 0),
-    hp.uniform('max_ngram', 1, 5)]
+space = {
+    'epochs': hp.qloguniform('epochs', 0, 4, 2),
+    'max_df': hp.loguniform('max_df', -10, 0),
+    'max_ngram': hp.uniform('max_ngram', 1, 5)
+}
 trials = MongoTrials('mongo://mongodb:27017/foo_db/jobs', exp_key='exp3')
 best = fmin(objective, space, trials=trials, algo=tpe.suggest, max_evals=100)
 
