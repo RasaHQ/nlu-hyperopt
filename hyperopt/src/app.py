@@ -17,14 +17,14 @@ pipeline:
 - name: "intent_featurizer_count_vectors"
 - name: "intent_classifier_tensorflow_embedding"
   epochs: {}
-""".format(round(epochs))
+""".format(int(epochs))
     config = read_yaml(config_yml)
     config = RasaNLUModelConfig(config)
     trainer = Trainer(config)
     # temporary hack around nlu bug
-    trainer.pipeline[1].epochs = round(epochs)
-    trainer.pipeline[0].max_df = max_df
-    trainer.pipeline[0].max_ngram = max_ngram
+    trainer.pipeline[1].epochs = int(epochs)
+    trainer.pipeline[0].max_df = float(max_df)
+    trainer.pipeline[0].max_ngram = int(max_ngram)
     training_data = load_data('/hyperopt/data/train.md')
     model = trainer.train(training_data)
     model_path = trainer.persist('/hyperopt/models')
