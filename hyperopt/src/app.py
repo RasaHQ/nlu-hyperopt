@@ -1,8 +1,9 @@
 import math
-from hyperopt import fmin, tpe, hp, space_eval, STATUS_OK
+from hyperopt import fmin, tpe, hp, space_eval
 from hyperopt.mongoexp import MongoTrials
 
 def objective(x):
+    from hyperopt import STATUS_OK
     from rasa_nlu.training_data import load_data
     from rasa_nlu.config import RasaNLUModelConfig
     from rasa_nlu.utils import read_yaml
