@@ -29,6 +29,8 @@ services:
       - mongodb
     links:
       - mongodb
+    deploy:
+      replicas: 4
     container_name: "hyperopt-mongo-worker"
     command: ["hyperopt-mongo-worker", "--mongo=mongodb:27017/foo_db", "--poll-interval=0.1"]
     volumes:
