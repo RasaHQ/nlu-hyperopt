@@ -13,6 +13,11 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - mongodb
+    environment:
+      EXP_KEY: "default-experiment"
+      MONGO_DATABASE: "foo_db"
+      MAX_EVALS: 100
+      HYPEROPT_DIR: "/hyperopt"
     links:
       - mongodb
     container_name: "hyperopt"
