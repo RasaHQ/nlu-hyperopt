@@ -24,7 +24,7 @@ pipeline:
     print(space)
     trainer.pipeline[1].epochs = int(space['epochs'])
     trainer.pipeline[0].max_df = float(space['max_df'])
-    trainer.pipeline[0].max_ngram = int(space['max_ngram'])
+    trainer.pipeline[0].max_features = int(space['max_features'])
     training_data = load_data('/hyperopt/data/train.md')
     try:
         model = trainer.train(training_data)
@@ -40,9 +40,9 @@ print("starting process")
 space = {
     'epochs': hp.qloguniform('epochs', 0, 4, 2),
     'max_df': hp.uniform('max_df', 0.01, 1.0),
-    'max_ngram': hp.qloguniform('max_ngram', 0, 2, 1)
+    'max_features': hp.qloguniform('max_features', 0, 4, 5)
 }
-trials = MongoTrials('mongo://mongodb:27017/foo_db/jobs', exp_key='exp6')
+trials = MongoTrials('mongo://mongodb:27017/foo_db/jobs', exp_key='exp8')
 best = fmin(objective, space, trials=trials, algo=tpe.suggest, max_evals=100)
 #best = fmin(objective, space, algo=tpe.suggest, max_evals=20)
 print(best)
