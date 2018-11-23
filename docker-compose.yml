@@ -36,6 +36,11 @@ services:
       - mongodb
     deploy:
       replicas: 4
+    environment:
+      EXP_KEY: "default-experiment"
+      MONGO_DATABASE: "foo_db"
+      MAX_EVALS: 100
+      HYPEROPT_DIR: "/hyperopt"
     command: ["hyperopt-mongo-worker", "--mongo=mongodb:27017/foo_db", "--poll-interval=0.1"]
     volumes:
       - ./hyperopt-mongo-worker/:/hyperopt/
