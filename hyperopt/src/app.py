@@ -10,7 +10,6 @@ def objective(space):
     from rasa_nlu.evaluate import run_evaluation
     from rasa_nlu.model import Trainer, Interpreter, Metadata
 
-    epochs, max_df, max_ngram = args
     config_yml = """
 language: en
 pipeline:
@@ -22,25 +21,29 @@ pipeline:
     config = RasaNLUModelConfig(config)
     trainer = Trainer(config)
     # temporary hack around nlu bug
+    print(space)
     trainer.pipeline[1].epochs = int(space['epochs'])
     trainer.pipeline[0].max_df = float(space['max_df'])
     trainer.pipeline[0].max_ngram = int(space['max_ngram'])
     training_data = load_data('/hyperopt/data/train.md')
-    model = trainer.train(training_data)
-    model_path = trainer.persist('/hyperopt/models')
-    evaluation = run_evaluation('/hyperopt/data/test.md', model_path, confmat_filename=None)
-    intent_f1 = evaluation['intent_evaluation']['f1_score']
-    return {'loss': 1-intent_f1, 'status': STATUS_OK }
-
+    try:
+        model = trainer.train(training_data)
+        model_path = trainer.persist('/hyperopt/models')
+        evaluation = run_evaluation('/hyperopt/data/test.md', model_path, confmat_filename=None)
+        intent_f1 = evaluation['intent_evaluation']['f1_score']
+        print("f1 score: {}".format(intent_f1))
+        return {'loss': 1-intent_f1, 'status': STATUS_OK }
+    except:
+        return {'loss': 1, 'status': STATUS_OK }
 
 print("starting process")
 space = {
     'epochs': hp.qloguniform('epochs', 0, 4, 2),
-    'max_df': hp.loguniform('max_df', -10, 0),
+    'max_df': hp.uniform('max_df', 0.01, 1.0),
     'max_ngram': hp.qloguniform('max_ngram', 0, 2, 1)
 }
-trials = MongoTrials('mongo://mongodb:27017/foo_db/jobs', exp_key='exp4')
+trials = MongoTrials('mongo://mongodb:27017/foo_db/jobs', exp_key='exp6')
 best = fmin(objective, space, trials=trials, algo=tpe.suggest, max_evals=100)
-
+#best = fmin(objective, space, algo=tpe.suggest, max_evals=20)
 print(best)
 print(space_eval(space, best))
