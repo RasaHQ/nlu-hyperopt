@@ -15,17 +15,18 @@ For local development, you can run this without docker or mongodb for fast debug
 `pip install -r requirements.txt`
 
 
-### On a brand new VPS (e.g. on google cloud)
+### On a brand new ubuntu 16 VPS (e.g. on google cloud)
 
 1. clone this repo
-2. `sudo bash install.sh`
+2. `sudo bash install/install.sh`
 
+This will install docker and docker-compose
 
 ## Quickstart
 
 To run hyperparameter search, you have to define a template Rasa NLU config file and a search space.
 
-### Template config
+### Step 1: Write a Template Configuration
 Here is an example. Just replace the parameters you want to search over with variable names:
 
 ```
@@ -42,7 +43,7 @@ pipeline:
 
 Save this at `hyperopt/data/template_config.yml`
 
-### Search Space
+### Step 2: Define a Search Space
 
 You need to define a search space in the `hyperopt/src/space.py` file.
 This is mounted into docker rather than copied into the container so 
@@ -61,7 +62,7 @@ search_space = {
 Check the hyperopt docs for details on how to define a space.
 
 
-### Training and test data
+### Step 3: Provide Your Training and Test data
 
 Put your training and test data in `hyperopt/data/{train, test}.md`
 You can do a train-test split in rasa nlu with:
@@ -75,7 +76,16 @@ train, test = data.train_test_split(train_frac=0.7)
 and you can write markdown by writing the output of `train.as_markdown()` to a file.
 
 
-## Start your experiment
+## Step 4: Start your experiment
+
+To quickly test on your local machine without docker or mongodb
+ 
+```
+export HYPEROPT_DIR="./hyperopt"
+python hyperopt/src/app.py
+```
+
+### Running on a Server
 
 Set the experiment name and max evaluations in your `.env` file
 
@@ -99,3 +109,11 @@ A good first guess is to set it to the numer of CPUs your machine has.
 
 All evaluations are stored in mongodb. By default, the loss is defined
 as `1 - f`, where `f` is the f1 score of the intent evaluation on your test data.
+
+Open a mongo shell session in the mongo container:
+
+Run this command to see the experiment with the lowest value of the loss so far
+
+`db.jobs.find({"exp_key" : "default-experiment", "result.loss":{$exists: 1}}).sort({"result.loss": 1}).limit(1).pretty()`
+
+replacing the value of the `exp_key` with your experiment name.
