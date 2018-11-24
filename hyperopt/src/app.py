@@ -66,4 +66,4 @@ if __name__ == "__main__":
 
     print("search complete!")
     print(best)
-    print(space_eval(space, best))
+    print(space_eval(search_space, best))
