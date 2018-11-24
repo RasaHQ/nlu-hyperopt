@@ -14,10 +14,10 @@ services:
     depends_on:
       - mongodb
     environment:
-      EXP_KEY: "default-experiment"
-      MONGO_DATABASE: "foo_db"
-      MAX_EVALS: 100
-      HYPEROPT_DIR: "/hyperopt"
+      EXP_KEY: ${EXPERIMENT_KEY}
+      MONGO_DATABASE: ${MONGO_DATABASE}
+      MAX_EVALS: ${MAX_EVALS}
+      HYPEROPT_DIR: ${HYPEROPT_DIR}
     links:
       - mongodb
     container_name: "hyperopt"
@@ -37,10 +37,10 @@ services:
     deploy:
       replicas: 4
     environment:
-      EXP_KEY: "default-experiment"
-      MONGO_DATABASE: "foo_db"
-      MAX_EVALS: 100
-      HYPEROPT_DIR: "/hyperopt"
+      EXP_KEY: ${EXPERIMENT_KEY}
+      MONGO_DATABASE: ${MONGO_DATABASE}
+      MAX_EVALS: ${MAX_EVALS}
+      HYPEROPT_DIR: ${HYPEROPT_DIR}
     command: ["hyperopt-mongo-worker", "--mongo=mongodb:27017/foo_db", "--poll-interval=0.1"]
     volumes:
       - ./hyperopt-mongo-worker/:/hyperopt/
