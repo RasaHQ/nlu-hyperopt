@@ -34,8 +34,6 @@ services:
       - mongodb
     links:
       - mongodb
-    deploy:
-      replicas: 4
     environment:
       EXP_KEY: ${EXPERIMENT_KEY}
       MONGO_DATABASE: ${MONGO_DATABASE}
