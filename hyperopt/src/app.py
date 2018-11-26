@@ -12,7 +12,7 @@ def objective(space):
     from rasa_nlu.training_data import load_data
     from rasa_nlu.config import RasaNLUModelConfig
     from rasa_nlu.utils import read_yaml
-    from rasa_nlu.evaluate import run_evaluation
+    from rasa_nlu.evaluate import run_evaluation, get_intent_targets, get_intent_predictions, evaluate_intents
     from rasa_nlu.model import Trainer, Interpreter, Metadata
     import os
 
@@ -27,17 +27,24 @@ def objective(space):
 
     trainer = Trainer(config)
     training_data = load_data(os.path.join(data_dir, 'train.md'))
+    test_data = load_data(os.path.join(data_dir, 'test.md'))
     # wrap in train and eval in try/except in case
     # hyperopt proposes invalid conbination of params
     try:
         model = trainer.train(training_data)
         model_path = trainer.persist(os.path.join(hyper_dir, 'models/'))
-        evaluation = run_evaluation(os.path.join(data_dir, 'test.md'),
-                                    model_path)
-        intent_f1 = evaluation['intent_evaluation']['f1_score']
+        intent_targets = get_intent_targets(test_data)
+        intent_results = get_intent_predictions(
+            intent_targets, model, test_data)
+        for idx, x in enumerate(intent_results):
+            if x.confidence < cutoff:
+                intent_results[idx].prediction = "out_of_scope"
+        intent_evaluation = evaluate_intents(intent_results)
+        intent_f1 = intent_evaluation['f1_score']
         print("intent f1: {}".format(intent_f1))
         return {'loss': 1-intent_f1, 'status': STATUS_OK }
     except:
+        raise
         return {'loss': 1, 'status': STATUS_OK }
 
 
