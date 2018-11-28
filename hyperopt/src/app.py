@@ -37,18 +37,23 @@ def objective(space):
         intent_targets = get_intent_targets(test_data)
         intent_results = get_intent_predictions(
             intent_targets, model, test_data)
-        loss = 0.        
-        scale = 25.
-        falsepos_factor = 3.0
+        asymmetry = 1.
+        incorrect_below = 0
+        correct_above = 0
         cutoff = space["cutoff"]
         for x in intent_results:
-            if x.target == x.prediction:
-                loss += np.tanh((cutoff-x.confidence)*scale)
-            else:
-                loss += 1. + falsepos_factor*(1+np.tanh((x.confidence-cutoff)*scale))
-        loss /= len(intent_results)
+            if x.target == x.prediction and x.confidence > cutoff:
+                correct_above += 1
+            elif x.target != x.prediction and x.confidence < cutoff:
+                incorrect_below += 1
+
+        correct_above /= len(intent_results)
+        incorrect_below /= len(intent_results)
+
         intent_evaluation = evaluate_intents(intent_results, None, None, None)
         intent_f1 = intent_evaluation['f1_score']
+
+        loss = - (intent_f1 + asymmetry * incorrect_below + correct_above)
         print("intent f1: {}, loss: {}".format(intent_f1, loss))
         return {'loss': loss, 'status': STATUS_OK }
     except:
