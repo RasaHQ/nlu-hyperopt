@@ -15,6 +15,7 @@ def objective(space):
     from rasa_nlu.evaluate import run_evaluation, get_intent_targets, get_intent_predictions, evaluate_intents
     from rasa_nlu.model import Trainer, Interpreter, Metadata
     import os
+    import numpy as np
 
     hyper_dir = os.environ.get("HYPEROPT_DIR", "./hyperopt")
     data_dir = os.path.join(hyper_dir, "data")
@@ -36,16 +37,23 @@ def objective(space):
         intent_targets = get_intent_targets(test_data)
         intent_results = get_intent_predictions(
             intent_targets, model, test_data)
-        for idx, x in enumerate(intent_results):
-            if x.confidence < cutoff:
-                intent_results[idx].prediction = "out_of_scope"
-        intent_evaluation = evaluate_intents(intent_results)
+        loss = 0.        
+        scale = 25.
+        falsepos_factor = 3.0
+        cutoff = space["cutoff"]
+        for x in intent_results:
+            if x.target == x.prediction:
+                loss += np.tanh((cutoff-x.confidence)*scale)
+            else:
+                loss += 1. + falsepos_factor*(1+np.tanh((x.confidence-cutoff)*scale))
+        loss /= len(intent_results)
+        intent_evaluation = evaluate_intents(intent_results, None, None, None)
         intent_f1 = intent_evaluation['f1_score']
-        print("intent f1: {}".format(intent_f1))
-        return {'loss': 1-intent_f1, 'status': STATUS_OK }
+        print("intent f1: {}, loss: {}".format(intent_f1, loss))
+        return {'loss': loss, 'status': STATUS_OK }
     except:
         raise
-        return {'loss': 1, 'status': STATUS_OK }
+        return {'loss': 100, 'status': STATUS_OK }
 
 
 if __name__ == "__main__":
