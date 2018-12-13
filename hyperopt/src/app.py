@@ -29,32 +29,41 @@ def objective(space):
     trainer = Trainer(config)
     training_data = load_data(os.path.join(data_dir, 'train.md'))
     test_data = load_data(os.path.join(data_dir, 'test.md'))
+    all_data = training_data.merge(test_data)
     # wrap in train and eval in try/except in case
     # hyperopt proposes invalid conbination of params
     try:
         model = trainer.train(training_data)
         model_path = trainer.persist(os.path.join(hyper_dir, 'models/'))
-        intent_targets = get_intent_targets(test_data)
-        intent_results = get_intent_predictions(
-            intent_targets, model, test_data)
+        #intent_targets = get_intent_targets(test_data)
+        #intent_results = [model.parse(e.text) for e in test_data]
+        #intent_results = get_intent_predictions(
+        #    intent_targets, model, test_data)
         asymmetry = 1.
         incorrect_below = 0
         correct_above = 0
         cutoff = space["cutoff"]
-        for x in intent_results:
-            if x.target == x.prediction and x.confidence > cutoff:
+        for e in all_data.intent_examples:
+            d = model.parse(e.text)
+            target = e.data["intent"]
+            prediction = d["intent"]["name"]
+            if d.get("intent_ranking"):
+                margin = d["intent_ranking"][0]["confidence"] - d["intent_ranking"][1]["confidence"]
+            else:
+                margin = 1.0
+            if target == prediction and margin > cutoff:
                 correct_above += 1
-            elif x.target != x.prediction and x.confidence < cutoff:
+            elif target != prediction and margin < cutoff:
                 incorrect_below += 1
 
-        correct_above /= len(intent_results)
-        incorrect_below /= len(intent_results)
+        correct_above /= len(all_data.intent_examples)
+        incorrect_below /= len(all_data.intent_examples)
 
-        intent_evaluation = evaluate_intents(intent_results, None, None, None)
-        intent_f1 = intent_evaluation['f1_score']
+        #intent_evaluation = evaluate_intents(intent_results, None, None, None)
+        #intent_f1 = intent_evaluation['f1_score']
 
-        loss = - (intent_f1 + asymmetry * incorrect_below + correct_above)
-        print("intent f1: {}, loss: {}".format(intent_f1, loss))
+        loss = - (asymmetry * incorrect_below + correct_above)
+        print("correct above: {}, incorrect below: {}, loss: {}".format(correct_above, incorrect_below, loss))
         return {'loss': loss, 'status': STATUS_OK }
     except:
         raise
