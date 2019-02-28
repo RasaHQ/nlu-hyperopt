@@ -19,7 +19,7 @@ def run_trial(space):
 
     data_dir = os.environ.get("DATA_DIRECTORY", "./data")
     model_dir = os.environ.get("MODEL_DIRECTORY", "./models")
-    target_metric = os.environ.get("TARGET_METRIC")
+    target_metric = os.environ.get("TARGET_METRIC", "f1_score")
 
     if target_metric not in AVAILABLE_METRICS:
         logger.error("The metric '{}' is not in the available metrics. "
