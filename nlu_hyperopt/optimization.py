@@ -1,10 +1,13 @@
-from hyperopt import STATUS_OK
+from hyperopt import STATUS_OK, STATUS_FAIL
 from rasa_nlu.training_data import load_data
 from rasa_nlu.config import RasaNLUModelConfig
 from rasa_nlu.utils import read_yaml
 from rasa_nlu.evaluate import run_evaluation
 from rasa_nlu.model import Trainer
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def optimize(space):
@@ -16,7 +19,7 @@ def optimize(space):
     model_dir = os.environ.get("MODEL_DIRECTORY", "/models")
     target_metric = os.environ.get("TARGET_METRIC", None)
 
-    print("Search space: {}".format(space))
+    logger.debug("Search space: {}".format(space))
 
     # The epoch has to be an int since `tqdm` otherwise will cause an exception.
     if "epochs" in space:
@@ -43,25 +46,24 @@ def optimize(space):
             loss = _get_nlu_evaluation_loss(model_path,
                                             target_metric,
                                             test_data_path)
-        return {'loss': loss, 'status': STATUS_OK }
-    except:
-        import traceback
-        traceback.print_exc()
-        return {'loss': 1, 'status': STATUS_OK }
+        return {'loss': loss, 'status': STATUS_OK}
+    except Exception as e:
+        logger.error(e)
+        return {'loss': 1, 'status': STATUS_FAIL}
 
 
 def _get_nlu_evaluation_loss(model_path, metric, data_path):
-    print("Calculating '{}' loss.".format(metric))
+    logger.info("Calculating '{}' loss.".format(metric))
 
     evaluation_result = run_evaluation(data_path, model_path)
     metric_result = evaluation_result['intent_evaluation'][metric]
-    print("{}: {}".format(metric, metric_result))
+    logger.info("{}: {}".format(metric, metric_result))
     
     return 1 - metric_result
 
 
 def _get_threshold_loss(model, data_path):
-    print("Calculating threshold loss.")
+    logger.info("Calculating threshold loss.")
 
     data = load_data(data_path)
     threshold = float(os.environ.get("THRESHOLD", 0.8))
@@ -88,7 +90,7 @@ def _get_threshold_loss(model, data_path):
     incorrect_above /= number_examples
 
     loss = margin_weight * incorrect_above + (1 - margin_weight) * correct_below
-    print("Threshold loss: {} (incorrect above: {}, correct below: {})"
-          "".format(loss, incorrect_above, correct_below))
+    logger.info("Threshold loss: {} (incorrect above: {}, correct below: {})"
+                "".format(loss, incorrect_above, correct_below))
 
     return loss

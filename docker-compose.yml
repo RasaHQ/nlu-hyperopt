@@ -34,6 +34,9 @@ services:
     environment:
       MAX_EVALS: ${MAX_EVALS}
       MONGO_URL: ${MONGO_URL}
+      TARGET_METRIC: ${TARGET_METRIC}
+      THRESHOLD: ${THRESHOLD}
+      ABOVE_BELOW_WEIGHT: ${ABOVE_BELOW_WEIGHT}
     command:
       - "/scripts/nlu-hyperopt-worker"
       - "--mongo=${MONGO_URL}"
