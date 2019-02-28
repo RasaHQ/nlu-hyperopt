@@ -83,7 +83,7 @@ file.
 
 ## Step 4: Configure your experiment
 
-This table lists all configuration possibilities which you can do through
+This table lists all the options you can configure through
 environment variables:
 
 | Environment Variable | Description                                                                                                                                                                                                                                                                                                                                                                                                |
