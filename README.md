@@ -31,7 +31,7 @@ To run the hyperparameter search, you have to define a template Rasa NLU
 pipeline configuration file and a search space.
 
 ### Step 1: Write a Template Configuration
-Here is an example. Just replace the parameters you want to search over with 
+Here is an example. Replace the parameters you want to search over with 
 variable names:
 
 ```
