@@ -9,15 +9,24 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+AVAILABLE_METRICS = ["f1_score", "accuracy", "precision", "threshold_loss"]
+
 
 def run_trial(space):
     """The objective function is pickled and transferred to the workers.
        Hence, this function has to contain all the imports we need.
     """
 
-    data_dir = os.environ.get("DATA_DIRECTORY", "/data")
-    model_dir = os.environ.get("MODEL_DIRECTORY", "/models")
-    target_metric = os.environ.get("TARGET_METRIC", None)
+    data_dir = os.environ.get("DATA_DIRECTORY", "./data")
+    model_dir = os.environ.get("MODEL_DIRECTORY", "./models")
+    target_metric = os.environ.get("TARGET_METRIC")
+
+    if target_metric not in AVAILABLE_METRICS:
+        logger.error("The metric '{}' is not in the available metrics. "
+                     "Please use one of the available metrics: {}."
+                     "".format(target_metric, AVAILABLE_METRICS))
+
+        return {"loss": 1, "status": STATUS_FAIL}
 
     logger.debug("Search space: {}".format(space))
 
@@ -31,11 +40,12 @@ def run_trial(space):
         config = RasaNLUModelConfig(config)
 
     trainer = Trainer(config)
-    training_data = load_data(os.path.join(data_dir, 'train.md'))
-    test_data_path = os.path.join(data_dir, 'test.md')
+    training_data = load_data(os.path.join(data_dir, "train.md"))
+    test_data_path = os.path.join(data_dir, "test.md")
 
     # wrap in train and eval in try/except in case
     # nlu_hyperopt proposes invalid combination of params
+
     try:
         model = trainer.train(training_data)
         model_path = trainer.persist(model_dir)
@@ -46,10 +56,10 @@ def run_trial(space):
             loss = _get_nlu_evaluation_loss(model_path,
                                             target_metric,
                                             test_data_path)
-        return {'loss': loss, 'status': STATUS_OK}
+        return {"loss": loss, "status": STATUS_OK}
     except Exception as e:
         logger.error(e)
-        return {'loss': 1, 'status': STATUS_FAIL}
+        return {"loss": 1, "status": STATUS_FAIL}
 
 
 def _get_nlu_evaluation_loss(model_path, metric, data_path):
