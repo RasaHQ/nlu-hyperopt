@@ -78,7 +78,7 @@ train, test = data.train_test_split(train_frac=0.7)
 ```
 
 and you can write markdown by writing the output of `train.as_markdown()` to a 
-sfile.
+file.
 
 
 ## Step 4: Configure your experiment
