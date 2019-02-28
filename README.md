@@ -31,7 +31,7 @@ To run the hyperparameter search, you have to define a template Rasa NLU
 pipeline configuration file and a search space.
 
 ### Step 1: Write a Template Configuration
-Here is an example. Just replace the parameters you want to search over with 
+Here is an example. Replace the parameters you want to search over with 
 variable names:
 
 ```
@@ -78,12 +78,12 @@ train, test = data.train_test_split(train_frac=0.7)
 ```
 
 and you can write markdown by writing the output of `train.as_markdown()` to a 
-sfile.
+file.
 
 
 ## Step 4: Configure your experiment
 
-This table lists all configuration possibilities which you can do through
+This table lists all the options you can configure through
 environment variables:
 
 | Environment Variable | Description                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -93,7 +93,7 @@ environment variables:
 | MODEL_DIRECTORY      | Directory which contains the trained models (default: `/models`)                                                                                                                                                                                                                                                                                                                                           |
 | TARGET_METRIC        | Target metric for the evaluation. You can choose between `f1_score`, `accuracy`, `precision`, and `threshold_loss`.                                                                                                                                                                                                                                                                                        |
 | THRESHOLD            | Only used by `threshold_loss`. Sets the threshold which the confidence of the correct intent has to be above or wrong predictions have to be below (default: 0.8).                                                                                                                                                                                                                                         |
-| ABOVE\_BELOW\_WEIGHT | Only used by `threshold_loss` (default: 0.5). This loss function penalizes incorrect predictions above the given threshold and correct predictions below a certain threshold. With the `ABOVE_BELOW_WEIGHT` you can configure the balance between these penalties. A larger value means that incorrect predictions above the threshold are heavier penalized than correct predictions below the threshold. |
+| ABOVE\_BELOW\_WEIGHT | Only used by `threshold_loss` (default: 0.5). This loss function penalizes incorrect predictions above the given threshold and correct predictions below a certain threshold. With the `ABOVE_BELOW_WEIGHT` you can configure the balance between these penalties. A larger value means that incorrect predictions above the threshold are penalized more heavily than correct predictions below the threshold. |
 
 ## Step 5: Start your experiment
 
@@ -102,7 +102,7 @@ environment variables:
 To quickly test on your local machine without docker or mongodb:
  
 ```
-python hyperopt/app.py
+python nlu_hyperopt/app.py
 ```
 
 ### Running on a Server
@@ -128,8 +128,8 @@ A good first guess is to set it to the numer of CPUs your machine has.
 
 The best configuration is printed by the hyperopt-master at the end of the 
 the hyperparameter search.
-Furthermore, all evaluation results are stored in the mongodb. 
-To seem them open a mongo shell session in the mongo container:
+All evaluation results are stored in the mongodb immediately after they run.
+To see the results while the optimization is running, open a mongo shell session in the mongo container:
 
 Run this command to see the experiment with the lowest value of the loss so far
 
