@@ -2,27 +2,29 @@ from hyperopt import fmin, tpe, space_eval
 from hyperopt.mongoexp import MongoTrials
 import os
 import logging
+import sys
 
 from nlu_hyperopt.space import search_space
 
+logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 
 logger = logging.getLogger(__name__)
 
 
-def objective(space):
-    """The objective function is pickled and transferred to the workers.
+def worker_function(space):
+    """This function is pickled and transferred to the workers.
        Hence, this function has to contain all the imports we need.
     """
-    from nlu_hyperopt.optimization import optimize
+    from nlu_hyperopt.optimization import run_trial
 
-    return optimize(space)
+    return run_trial(space)
 
 
 if __name__ == "__main__":
     # This function is run by the `nlu_hyperopt-master` and coordinates the
     # hyperparameter search.
     exp_key = os.environ.get("EXP_KEY", "default")
-    mongo_url = os.environ.get("MONGO_URL", None)
+    mongo_url = os.environ.get("MONGO_URL")
 
     max_evals = int(os.environ.get("MAX_EVALS", 100))
 
@@ -43,9 +45,15 @@ if __name__ == "__main__":
         logger.debug("No mongo database set. Running in memory.")
         trials = None
 
-    best = fmin(objective, search_space, trials=trials, algo=tpe.suggest, 
+    best = fmin(worker_function, search_space, trials=trials, algo=tpe.suggest,
                 max_evals=max_evals)
 
     logger.info("Hyperparameter search complete!")
+
     best_config = space_eval(search_space, best)
-    logger.info("The best configuration is: {}".format(best_config))
+    logger.debug("The best values are: {}".format(best_config))
+
+    data_dir = os.environ.get("DATA_DIRECTORY", "/data")
+    with open(os.path.join(data_dir, "template_config.yml")) as f:
+        config_yml = f.read().format(**best_config)
+        logger.info("The best configuration is: \n{}\n".format(config_yml))

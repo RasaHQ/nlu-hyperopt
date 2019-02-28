@@ -10,7 +10,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def optimize(space):
+def run_trial(space):
     """The objective function is pickled and transferred to the workers.
        Hence, this function has to contain all the imports we need.
     """

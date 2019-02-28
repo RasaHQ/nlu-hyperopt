@@ -25,10 +25,13 @@ debugging.
 
 This will install Docker and docker-compose.
 
-## Quickstart
+### Quickstart
 
-To run the hyperparameter search, you have to define a template Rasa NLU 
-pipeline configuration file and a search space.
+To run a quick test whether everything works, run `docker-compose up`.
+This will run a default experiment with the provided sample configuration and
+data.
+
+## How to Use
 
 ### Step 1: Write a Template Configuration
 Here is an example. Replace the parameters you want to search over with 
