@@ -102,7 +102,7 @@ environment variables:
 To quickly test on your local machine without docker or mongodb:
  
 ```
-python hyperopt/app.py
+python nlu_hyperopt/app.py
 ```
 
 ### Running on a Server
