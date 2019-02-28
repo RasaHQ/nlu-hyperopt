@@ -128,7 +128,7 @@ A good first guess is to set it to the numer of CPUs your machine has.
 
 The best configuration is printed by the hyperopt-master at the end of the 
 the hyperparameter search.
-Furthermore, all evaluation results are stored in the mongodb. 
+All evaluation results are stored in the mongodb immediately after they run.
 To seem them open a mongo shell session in the mongo container:
 
 Run this command to see the experiment with the lowest value of the loss so far
