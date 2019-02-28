@@ -1,46 +1,45 @@
 version: "3"
+
 services:
+  # Database which will store the evaluation results and is used to coordinate
+  # the hyperparameter search.
   mongodb:
     image: "mongo"
     ports:
     - "27017:27017"
     container_name: "mongodb"
     volumes:
-    - ./data/mongo:/data/db
-  hyperopt:
+    - ./volumes/mongo:/data/db
+  
+  # Master service which leads the hyperparameter search.
+  hyperopt-master:
     build:
-      context: ./hyperopt
+      context: .
       dockerfile: Dockerfile
     depends_on:
       - mongodb
     environment:
       EXP_KEY: ${EXPERIMENT_KEY}
-      MONGO_DATABASE: ${MONGO_DATABASE}
       MAX_EVALS: ${MAX_EVALS}
-      HYPEROPT_DIR: ${HYPEROPT_DIR}
-    links:
-      - mongodb
-    container_name: "hyperopt"
-    volumes:
-      - ./hyperopt/src:/hyperopt/
-      - ./hyperopt/data:/hyperopt/data/
-      - ./hyperopt/models:/hyperopt/models/
-  hyperopt-mongo-worker:
+      MONGO_URL: ${MONGO_URL}
+  
+  # Workers which train and evaluate the NLU model.
+  hyperopt-worker:
     build:
-      context: ./hyperopt
+      context: .
       dockerfile: Dockerfile
     depends_on:
-      - hyperopt
-      - mongodb
-    links:
+      - hyperopt-master
       - mongodb
     environment:
-      EXP_KEY: ${EXPERIMENT_KEY}
-      MONGO_DATABASE: ${MONGO_DATABASE}
       MAX_EVALS: ${MAX_EVALS}
-      HYPEROPT_DIR: ${HYPEROPT_DIR}
-    command: ["hyperopt-mongo-worker", "--mongo=mongodb:27017/foo_db", "--poll-interval=0.1"]
+      MONGO_URL: ${MONGO_URL}
+      TARGET_METRIC: ${TARGET_METRIC}
+      THRESHOLD: ${THRESHOLD}
+      ABOVE_BELOW_WEIGHT: ${ABOVE_BELOW_WEIGHT}
+    command:
+      - "/scripts/nlu-hyperopt-worker"
+      - "--mongo=${MONGO_URL}"
+      - "--poll-interval=0.1"
     volumes:
-      - ./hyperopt-mongo-worker/:/hyperopt/
-      - ./hyperopt/data:/hyperopt/data/
-      - ./hyperopt/models:/hyperopt/models/
+     - ./volumes/models:/models/

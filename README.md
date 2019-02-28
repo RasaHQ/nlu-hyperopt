@@ -1,12 +1,15 @@
-## Hyperparameter Search for Rasa NLU
+## Hyperparameter Search for [Rasa NLU](https://rasa.com/docs/nlu/)
 
-This repo provides a setup for doing hyperparamter search, locally or on a cloud instance.
+This repo provides a setup for doing hyperparameter search for the best
+configuration of the [pipeline components](https://rasa
+.com/docs/nlu/components/).
+This can either be done locally or on a cluster. It uses [hyperopt]
+(https://github.com/hyperopt/hyperopt) to do the actual work.
+This is based on a template 
+[here](https://github.com/erdiolmezogullari/docker-parallel-hyperopt).
 
-It uses [hyperopt](https://github.com/hyperopt/hyperopt) to do the actual work.
-This is based on a template [here](https://github.com/erdiolmezogullari/docker-parallel-hyperopt).
-
-For local development, you can run this without docker or mongodb for fast debugging.
-
+For local development, you can run this without docker or mongodb for fast 
+debugging.
 
 ## Installation
 
@@ -20,14 +23,19 @@ For local development, you can run this without docker or mongodb for fast debug
 1. clone this repo
 2. `sudo bash install/install.sh`
 
-This will install docker and docker-compose
+This will install Docker and docker-compose.
 
-## Quickstart
+### Quickstart
 
-To run hyperparameter search, you have to define a template Rasa NLU config file and a search space.
+To run a quick test whether everything works, run `docker-compose up`.
+This will run a default experiment with the provided sample configuration and
+data.
+
+## How to Use
 
 ### Step 1: Write a Template Configuration
-Here is an example. Just replace the parameters you want to search over with variable names:
+Here is an example. Replace the parameters you want to search over with 
+variable names:
 
 ```
 language: en
@@ -41,13 +49,11 @@ pipeline:
   epochs: {epochs}
 ```
 
-Save this at `hyperopt/data/template_config.yml`
+Save this at `data/template_config.yml`
 
 ### Step 2: Define a Search Space
 
-You need to define a search space in the `hyperopt/src/space.py` file.
-This is mounted into docker rather than copied into the container so 
-you don't have to rebuild when you change something.
+You need to define a search space in the `hyperopt/space.py` file.
 
 ```
 from hyperopt import hp
@@ -59,13 +65,14 @@ search_space = {
 }
 ```
 
-Check the hyperopt docs for details on how to define a space.
+Check the [hyperopt docs](https://github.com/hyperopt/hyperopt/wiki/FMin#2-defining-a-search-space) 
+for details on how to define a space.
 
 
 ### Step 3: Provide Your Training and Test data
 
-Put your training and test data in `hyperopt/data/{train, test}.md`
-You can do a train-test split in rasa nlu with:
+Put your training and test data in `data/{train, test}.md`
+You can do a train-test split in Rasa NLU with:
 
 ```
 from rasa_nlu.training_data import load_data
@@ -73,16 +80,32 @@ data = load_data('all_my_data.md')
 train, test = data.train_test_split(train_frac=0.7)
 ```
 
-and you can write markdown by writing the output of `train.as_markdown()` to a file.
+and you can write markdown by writing the output of `train.as_markdown()` to a 
+file.
 
 
-## Step 4: Start your experiment
+## Step 4: Configure your experiment
 
-To quickly test on your local machine without docker or mongodb
+This table lists all the options you can configure through
+environment variables:
+
+| Environment Variable | Description                                                                                                                                                                                                                                                                                                                                                                                                |
+|----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| MAX_EVALS            | Maximum number of evaluations which are run during the hyperparameter search                                                                                                                                                                                                                                                                                                                               |
+| DATA_DIRECTORY       | Directory which contains the files `train.md`,`validation.md`, and `template_config.yml` (default: `./data`)                                                                                                                                                                                                                                                                                                     |
+| MODEL_DIRECTORY      | Directory which contains the trained models (default: `./models`)                                                                                                                                                                                                                                                                                                                                           |
+| TARGET_METRIC        | Target metric for the evaluation. You can choose between `f1_score`, `accuracy`, `precision`, and `threshold_loss`.                                                                                                                                                                                                                                                                                        |
+| THRESHOLD            | Only used by `threshold_loss`. Sets the threshold which the confidence of the correct intent has to be above or wrong predictions have to be below (default: 0.8).                                                                                                                                                                                                                                         |
+| ABOVE\_BELOW\_WEIGHT | Only used by `threshold_loss` (default: 0.5). This loss function penalizes incorrect predictions above the given threshold and correct predictions below a certain threshold. With the `ABOVE_BELOW_WEIGHT` you can configure the balance between these penalties. A larger value means that incorrect predictions above the threshold are penalized more heavily than correct predictions below the threshold. |
+
+## Step 5: Start your experiment
+
+### Run it locally
+
+To quickly test on your local machine without docker or mongodb:
  
 ```
-export HYPEROPT_DIR="./hyperopt"
-python hyperopt/src/app.py
+python -m nlu_hyperopt.app
 ```
 
 ### Running on a Server
@@ -94,26 +117,52 @@ Here is an example:
 ```
 EXPERIMENT_KEY=default-experiment
 MAX_EVALS=100
-MONGO_DATABASE=foo_db
-HYPEROPT_DIR=/hyperopt
+MONGO_URL=mongodb:27017/nlu-hyperopt
 ```
 
 To run:
 
-`docker-compose up -d --scale hyperopt-mongo-worker=4`
+`docker-compose up -d --scale hyperopt-worker=4`
 
 It's up to you how many workers you want to run.
 A good first guess is to set it to the numer of CPUs your machine has.
 
-## Seeing results
+## Experiment Results
 
-All evaluations are stored in mongodb. By default, the loss is defined
-as `1 - f`, where `f` is the f1 score of the intent evaluation on your test data.
-
-Open a mongo shell session in the mongo container:
+The best configuration is printed by the hyperopt-master at the end of the 
+the hyperparameter search.
+All evaluation results are stored in the mongodb immediately after they run.
+To see the results while the optimization is running, open a mongo shell session in the mongo container:
 
 Run this command to see the experiment with the lowest value of the loss so far
 
 `db.jobs.find({"exp_key" : "default-experiment", "result.loss":{$exists: 1}}).sort({"result.loss": 1}).limit(1).pretty()`
 
 replacing the value of the `exp_key` with your experiment name.
+
+
+# Loss Functions
+
+## f1_score
+This is loss is defined as `1 - f`, where `f` is the f1 score of the intent 
+evaluation on your test data.
+
+## accuracy
+This is loss is defined as `1 - f`, where `f` is the accuracy score of the 
+intent evaluation on your test data.
+
+## precision
+This is loss is defined as `1 - f`, where `f` is the precision score of the 
+intent evaluation on your test data.
+
+## threshold_loss
+This is loss is defined as 
+```
+l * incorrect_above + (1-l) * correct_below
+```
+
+ where
+`incorrect_above` describes the fraction of incorrect predictions above a 
+certain threshold and `correct_below` describes the fraction of correct 
+predictions below a certain threshold. Threshold and `l` can be configured 
+through environment variables.

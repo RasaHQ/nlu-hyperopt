@@ -1,1 +1,4 @@
-*~
+volumes
+errors.json
+__pycache__
+models
