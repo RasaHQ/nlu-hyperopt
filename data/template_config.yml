@@ -1,0 +1,9 @@
+# This file contains your NLU pipeline configuration.
+# Replace parameters which you want to optimize with their name in 
+# curly brackets, e.g. `"epochs": 100` becomes `"epochs": {epochs}`.
+
+language: en
+pipeline:
+- name: "intent_featurizer_count_vectors"
+- name: "intent_classifier_tensorflow_embedding"
+  epochs: {epochs}

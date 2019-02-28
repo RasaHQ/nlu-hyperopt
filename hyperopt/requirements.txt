@@ -1,4 +1,0 @@
-git+https://github.com/RasaHQ/rasa_nlu.git@add-analyzer#egg=rasa_nlu
-hyperopt==0.1.1
-flask
-dill
