@@ -41,7 +41,7 @@ def run_trial(space):
 
     trainer = Trainer(config)
     training_data = load_data(os.path.join(data_dir, "train.md"))
-    test_data_path = os.path.join(data_dir, "test.md")
+    test_data_path = os.path.join(data_dir, "validation.md")
 
     # wrap in train and eval in try/except in case
     # nlu_hyperopt proposes invalid combination of params
