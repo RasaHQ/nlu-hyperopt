@@ -159,7 +159,7 @@ l * incorrect_above + (1-l) * correct_below
 ```
 
  where
-`incorrect_above` describes the number of incorrect predictions above a certain
-threshold and `correct_below` describes the number of correct predictions
-below a certain threshold. Threshold and `l` can be configured through 
-environment variables.
+`incorrect_above` describes the fraction of incorrect predictions above a 
+certain threshold and `correct_below` describes the fraction of correct 
+predictions below a certain threshold. Threshold and `l` can be configured 
+through environment variables.
