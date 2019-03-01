@@ -32,8 +32,9 @@ services:
       - hyperopt-master
       - mongodb
     environment:
-      MAX_EVALS: ${MAX_EVALS}
       MONGO_URL: ${MONGO_URL}
+      DATA_DIRECTORY: ${DATA_DIRECTORY}
+      MODEL_DIRECTORY: ${MODEL_DIRECTORY}
       TARGET_METRIC: ${TARGET_METRIC}
       THRESHOLD: ${THRESHOLD}
       ABOVE_BELOW_WEIGHT: ${ABOVE_BELOW_WEIGHT}
