@@ -65,7 +65,8 @@ def run_trial(space):
 def _get_nlu_evaluation_loss(model_path, metric, data_path):
     logger.info("Calculating '{}' loss.".format(metric))
 
-    evaluation_result = run_evaluation(data_path, model_path)
+    evaluation_result = run_evaluation(data_path, model_path,
+                                       confmat_filename=None)
     metric_result = evaluation_result['intent_evaluation'][metric]
     logger.info("{}: {}".format(metric, metric_result))
     
