@@ -2,8 +2,7 @@
 
 This repo provides a setup for doing hyperparameter search for the best
 configuration of the [pipeline components](https://rasa.com/docs/nlu/components/).
-This can either be done locally or on a cluster. It uses [hyperopt]
-(https://github.com/hyperopt/hyperopt) to do the actual work.
+This can either be done locally or on a cluster. It uses [hyperopt](https://github.com/hyperopt/hyperopt) to do the actual work.
 This is based on a template 
 [here](https://github.com/erdiolmezogullari/docker-parallel-hyperopt).
 
