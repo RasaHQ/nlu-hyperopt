@@ -8,6 +8,9 @@ COPY scripts /scripts
 # Make sure we use the virtualenv
 ENV PATH="/build/bin:$PATH"
 
+# Be root
+USER root
+
 RUN pip install -U pip && pip install -r requirements.txt && chmod -R +x /scripts
 
 WORKDIR "/"
