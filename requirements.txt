@@ -1,4 +1,4 @@
-rasa==1.4.5
+rasa
 hyperopt==0.1.1
 flask
 dill
