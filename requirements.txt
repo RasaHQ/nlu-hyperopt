@@ -1,3 +1,4 @@
-hyperopt==0.2.2
+networkx~=2.3.0
+hyperopt==0.1.1
 flask
 dill
