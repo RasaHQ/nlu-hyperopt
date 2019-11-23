@@ -5,6 +5,9 @@ COPY data /data
 COPY nlu_hyperopt /nlu_hyperopt
 COPY scripts /scripts
 
+# Make sure we use the virtualenv
+ENV PATH="/build/bin:$PATH"
+
 RUN pip install -U pip && pip install -r requirements.txt && chmod -R +x /scripts
 
 WORKDIR "/"
