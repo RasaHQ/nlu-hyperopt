@@ -14,3 +14,7 @@ USER root
 RUN pip install -U pip && pip install -r requirements.txt && chmod -R +x /scripts
 
 WORKDIR "/"
+
+CMD []
+
+ENTRYPOINT ["entrypoint.sh"]
