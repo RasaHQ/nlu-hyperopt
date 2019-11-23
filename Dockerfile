@@ -15,4 +15,6 @@ RUN pip install -U pip && pip install -r requirements.txt && chmod -R +x /script
 
 WORKDIR "/"
 
+ENTRYPOINT []
+
 CMD ["python", "-m", "nlu_hyperopt.app"]
