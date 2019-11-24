@@ -1,11 +1,6 @@
 # action.yml
 name: 'NLU Hyperopt'
 description: 'Find optimal hyperparameters for NLU model'
-inputs:
-  max-evals:  # id of input
-    description: 'maximum number of evaluations'
-    required: true
-    default: 30
 outputs:
   best-intent-f1: # id of output
     description: 'best intent macro averaged f1 score found'
