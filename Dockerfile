@@ -1,5 +1,6 @@
 FROM rasa/rasa:1.4.5-full
 
+COPY setup.py .
 COPY requirements.txt .
 COPY data /data
 COPY nlu_hyperopt /nlu_hyperopt
