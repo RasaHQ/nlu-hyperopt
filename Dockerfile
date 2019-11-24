@@ -17,4 +17,4 @@ WORKDIR "/"
 
 ENTRYPOINT ["/build/bin/python"]
 
-CMD ["-m", "nlu_hyperopt.app"]
+CMD ["/nlu_hyperopt/app.py"]
