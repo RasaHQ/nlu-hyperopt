@@ -1,3 +1,4 @@
+-e .
 hyperopt==0.1.1
 flask
 dill
