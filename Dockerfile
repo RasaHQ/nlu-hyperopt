@@ -15,6 +15,6 @@ RUN pip install -U pip && pip install -r requirements.txt && chmod -R +x /script
 
 WORKDIR "/"
 
-ENTRYPOINT []
+ENTRYPOINT ["/build/bin/python"]
 
-CMD ["/build/bin/python", "-m", "nlu_hyperopt.app"]
+CMD ["-m", "nlu_hyperopt.app"]
