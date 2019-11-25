@@ -1,9 +1,10 @@
 from hyperopt import STATUS_OK, STATUS_FAIL
-from rasa_nlu.training_data import load_data
-from rasa_nlu.config import RasaNLUModelConfig
-from rasa_nlu.utils import read_yaml
-from rasa_nlu.evaluate import run_evaluation
-from rasa_nlu.model import Trainer
+from rasa.nlu.training_data import load_data
+from rasa.nlu.config import RasaNLUModelConfig
+from rasa.utils.io import read_yaml
+from rasa.test import test_nlu
+from rasa.nlu.model import Trainer
+import rasa
 import os
 import logging
 
@@ -37,7 +38,7 @@ def run_trial(space):
     with open(os.path.join(data_dir, "template_config.yml")) as f:
         config_yml = f.read().format(**space)
         config = read_yaml(config_yml)
-        config = RasaNLUModelConfig(config)
+        config = rasa.nlu.config.load(config)
 
     trainer = Trainer(config)
     training_data = load_data(os.path.join(data_dir, "train.md"))
@@ -65,7 +66,7 @@ def run_trial(space):
 def _get_nlu_evaluation_loss(model_path, metric, data_path):
     logger.info("Calculating '{}' loss.".format(metric))
 
-    evaluation_result = run_evaluation(data_path, model_path,
+    evaluation_result = test_nlu(model_path, data_path,
                                        confmat_filename=None)
     metric_result = evaluation_result['intent_evaluation'][metric]
     logger.info("{}: {}".format(metric, metric_result))
