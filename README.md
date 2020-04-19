@@ -51,7 +51,7 @@ Save this at `data/template_config.yml`
 
 ### Step 2: Define a Search Space
 
-You need to define a search space in the `hyperopt/space.py` file.
+You need to define a search space in the `nlu_hyperopt/space.py` file.
 
 ```
 from hyperopt import hp
@@ -69,7 +69,7 @@ for details on how to define a space.
 
 ### Step 3: Provide Your Training and Test data
 
-Put your training and test data in `data/{train, test}.md`
+Put your training and test data in `data/{train, validation}.md`
 You can do a train-test split in Rasa NLU with:
 
 ```

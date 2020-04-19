@@ -53,7 +53,7 @@ if __name__ == "__main__":
     best_config = space_eval(search_space, best)
     logger.debug("The best values are: {}".format(best_config))
 
-    data_dir = os.environ.get("DATA_DIRECTORY", "/data")
+    data_dir = os.environ.get("DATA_DIRECTORY", "./data")
     with open(os.path.join(data_dir, "template_config.yml")) as f:
         config_yml = f.read().format(**best_config)
         logger.info("The best configuration is: \n{}\n".format(config_yml))
