@@ -142,19 +142,19 @@ replacing the value of the `exp_key` with your experiment name.
 # Loss Functions
 
 ## f1_score
-This is loss is defined as `1 - f`, where `f` is the f1 score of the intent 
+This loss is defined as `1 - f`, where `f` is the f1 score of the intent 
 evaluation on your test data.
 
 ## accuracy
-This is loss is defined as `1 - f`, where `f` is the accuracy score of the 
+This loss is defined as `1 - f`, where `f` is the accuracy score of the 
 intent evaluation on your test data.
 
 ## precision
-This is loss is defined as `1 - f`, where `f` is the precision score of the 
+This loss is defined as `1 - f`, where `f` is the precision score of the 
 intent evaluation on your test data.
 
 ## threshold_loss
-This is loss is defined as 
+This loss is defined as 
 ```
 l * incorrect_above + (1-l) * correct_below
 ```
