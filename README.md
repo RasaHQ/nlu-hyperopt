@@ -134,7 +134,11 @@ To see the results while the optimization is running, open a mongo shell session
 
 Run this command to see the experiment with the lowest value of the loss so far
 
-`db.jobs.find({"exp_key" : "default-experiment", "result.loss":{$exists: 1}}).sort({"result.loss": 1}).limit(1).pretty()`
+
+```
+use nlu-hyperopt
+db.jobs.find({"exp_key" : "default-experiment", "result.loss":{$exists: 1}}).sort({"result.loss": 1}).limit(1).pretty()
+```
 
 replacing the value of the `exp_key` with your experiment name.
 
