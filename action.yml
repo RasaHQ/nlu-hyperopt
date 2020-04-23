@@ -5,5 +5,10 @@ outputs:
   best-intent-f1: # id of output
     description: 'best intent macro averaged f1 score found'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: 'docker-compose'
+  args: 
+    - "up"
+    - "-d"
+    - "--scale"
+    - "4"
+  
