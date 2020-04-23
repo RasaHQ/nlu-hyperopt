@@ -11,8 +11,6 @@ USER root
 
 RUN pip install -U pip && pip install -r requirements.txt && chmod -R +x /scripts 
 
-RUN pip install .
-
 WORKDIR "/"
 
 ENTRYPOINT ["python"]
