@@ -1,0 +1,12 @@
+
+name: nlu-hyperopt
+on: [pull_request]
+
+jobs:
+  nlu-hyperopt:
+    name: NLU hyperoptimization
+    runs-on: ubuntu-latest
+    steps:
+      - name: NLU hyperoptimization
+        id: nluhyperopt
+        uses: RasaHQ/nlu-hyperopt@v0.1-alpha
