@@ -1,14 +1,11 @@
 
-name: nlu-hyperopt
+name: main
 on: [pull_request]
 
 jobs:
   nlu-hyperopt:
-    name: NLU hyperoptimization
+    name: nlu-hyperoptimization
     runs-on: ubuntu-latest
     steps:
     - uses: RasaHQ/nlu-hyperopt@rasa-1-compat
-      name: run docker-compose
-      continue-on-error: true
-    - name: Check running containers
-      run: docker-compose ps
+      name: run nlu-hyperopt
