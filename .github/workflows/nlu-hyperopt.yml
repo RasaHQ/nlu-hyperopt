@@ -9,11 +9,11 @@ jobs:
     steps:
     - uses: RasaHQ/nlu-hyperopt@rasa-1-compat
       name: Run NLU Hyperoptimization
-      volumes:
-        - 'data':'/data'
-        - 'nlu_hyperopt/space.py':'/nlu_hyperopt/space.py'
       env:
-        DATA_DIR: '/data'
-        MODEL_DIR: '/models'
+        DATA_DIR: /data
+        MODEL_DIR: /models
         MAX_EVALS: 1
-        TARGET_METRIC: 'f1_score'
+        TARGET_METRIC: f1_score
+      volumes:
+        - data:/data
+        - nlu_hyperopt/space.py:/nlu_hyperopt/space.py
