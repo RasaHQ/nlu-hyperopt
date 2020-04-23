@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: RasaHQ/nlu-hyperopt@rasa-1-compat
-    - name: run docker-compose
+      name: run docker-compose
       run: docker-compose up -d --scale 4
       continue-on-error: true
     - name: Check running containers
