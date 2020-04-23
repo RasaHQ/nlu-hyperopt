@@ -9,3 +9,6 @@ jobs:
     steps:
     - uses: RasaHQ/nlu-hyperopt@rasa-1-compat
       name: run nlu-hyperopt
+      with:
+        train-val-data: './data'
+        search-space: './nlu_hyperopt/space.py'
