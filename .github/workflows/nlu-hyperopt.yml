@@ -6,9 +6,9 @@ jobs:
   nlu-hyperopt:
     name: NLU hyperoptimization
     runs-on: ubuntu-latest
-    volumes:
-        - data:/data
-        - nlu_hyperopt/space.py:/nlu_hyperopt/space.py
+    # volumes:
+    #     - data:/data
+    #     - nlu_hyperopt/space.py:/nlu_hyperopt/space.py
     steps:
     - uses: RasaHQ/nlu-hyperopt@rasa-1-compat
       name: Run NLU Hyperoptimization
