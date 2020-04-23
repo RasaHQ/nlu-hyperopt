@@ -9,4 +9,4 @@ jobs:
     steps:
       - name: NLU hyperoptimization
         id: nluhyperopt
-        uses: RasaHQ/nlu-hyperopt@v0.1-alpha
+        uses: RasaHQ/nlu-hyperopt@rasa-1-compat
