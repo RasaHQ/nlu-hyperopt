@@ -14,6 +14,8 @@ USER root
 RUN pip install -U pip && pip install -r requirements.txt && chmod -R +x /scripts 
 
 ENV PYTHONPATH "/"
+ENV DATA_DIRECTORY "/data"
+ENV MODEL_DIRECTORY "/models"
 
 ENTRYPOINT ["python"]
 

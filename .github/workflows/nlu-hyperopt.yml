@@ -11,4 +11,4 @@ jobs:
       name: run docker-compose
       continue-on-error: true
     - name: Check running containers
-      run: docker ps
+      run: docker-compose ps
