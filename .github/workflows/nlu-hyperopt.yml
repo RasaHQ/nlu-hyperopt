@@ -10,5 +10,4 @@ jobs:
     - uses: RasaHQ/nlu-hyperopt@rasa-1-compat
       name: Run NLU Hyperoptimization
       with:
-        train-val-data: './data'
-        search-space: './nlu_hyperopt/space.py'
+        buildargs: 'MAX_EVALS=1'
