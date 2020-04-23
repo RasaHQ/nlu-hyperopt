@@ -31,9 +31,10 @@ outputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  volumes:
+    - ':${{ inputs.train-val-data }}:/data'
+    - ':${{ inputs.search-space }}:/nlu_hyperopt/space.py'
   args:
-    - '--volume :${{ inputs.train-val-data }}:/data'
-    - '--volume :${{ inputs.search-space }}:/nlu_hyperopt/space.py'
     - '--build-arg MAX_EVALS=${{ inputs.max-evals }}'
     - '--build-arg TARGET_METRIC=${{ inputs.target-metric }}'
     - '--build-arg THRESHOLD=${{ inputs.threshold }}'

@@ -4,11 +4,11 @@ on: [pull_request]
 
 jobs:
   nlu-hyperopt:
-    name: nlu-hyperoptimization
+    name: NLU hyperoptimization
     runs-on: ubuntu-latest
     steps:
     - uses: RasaHQ/nlu-hyperopt@rasa-1-compat
-      name: run nlu-hyperopt
+      name: Run NLU Hyperoptimization
       with:
         train-val-data: './data'
         search-space: './nlu_hyperopt/space.py'
