@@ -19,6 +19,7 @@ services:
     depends_on:
       - mongodb
     environment:
+      DATA_DIRECTORY: ${DATA_DIRECTORY}
       EXP_KEY: ${EXPERIMENT_KEY}
       MAX_EVALS: ${MAX_EVALS}
       MONGO_URL: ${MONGO_URL}
