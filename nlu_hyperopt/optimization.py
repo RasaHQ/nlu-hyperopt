@@ -18,9 +18,9 @@ def run_trial(space):
        Hence, this function has to contain all the imports we need.
     """
 
-    data_dir = os.environ.get("DATA_DIRECTORY", "./data")
-    model_dir = os.environ.get("MODEL_DIRECTORY", "./models")
-    target_metric = os.environ.get("TARGET_METRIC", "f1_score")
+    data_dir = os.environ.get("INPUT_DATA_DIRECTORY", "./data")
+    model_dir = os.environ.get("INPUT_MODEL_DIRECTORY", "./models")
+    target_metric = os.environ.get("INPUT_TARGET_METRIC", "f1_score")
 
     if target_metric not in AVAILABLE_METRICS:
         logger.error("The metric '{}' is not in the available metrics. "
@@ -76,8 +76,8 @@ def _get_threshold_loss(model, data_path):
     logger.info("Calculating threshold loss.")
 
     data = load_data(data_path)
-    threshold = float(os.environ.get("THRESHOLD", 0.8))
-    margin_weight = float(os.environ.get("ABOVE_BELOW_WEIGHT", 0.5))
+    threshold = float(os.environ.get("INPUT_THRESHOLD", 0.8))
+    margin_weight = float(os.environ.get("INPUT_ABOVE_BELOW_WEIGHT", 0.5))
 
     correct_below = 0
     incorrect_above = 0
