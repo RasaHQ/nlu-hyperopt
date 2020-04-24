@@ -7,7 +7,7 @@ jobs:
     name: NLU hyperoptimization
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@2.1.0
+    - uses: actions/checkout@v2
     - uses: RasaHQ/nlu-hyperopt@rasa-1-compat
       name: Run NLU Hyperoptimization
       env:
