@@ -11,11 +11,11 @@ COPY scripts /scripts
 # Be root
 USER root
 
+RUN if [[ ! -z "$SEARCH_SPACE" &&  "$SEARCH_SPACE" != "/nlu_hyperopt/space.py" ]]; then  cp -f $SEARCH_SPACE /nlu_hyperopt/space.py ; fi
+
 RUN pip install -U pip && pip install -r requirements.txt && chmod -R +x /scripts 
 
 ENV PYTHONPATH "/"
-
-ENV DATA_DIRECTORY="/data"
 
 ENTRYPOINT ["python"]
 

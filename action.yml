@@ -1,43 +1,11 @@
 # action.yml
 name: 'NLU Hyperopt'
 description: 'Find optimal hyperparameters for NLU model'
-# inputs:
-  # search-space:
-  #   description: 'Check the [hyperopt docs](https://github.com/hyperopt/hyperopt/wiki/FMin#2-defining-a-search-space) 
-  #   for details on how to define a space.'
-  #   required: true
-  # train-val-data: 
-  #   description: 'Directory which contains the files `train.md`,`validation.md`, and `template_config.yml`'
-  #   required: true
-  # max-evals:
-  #   description: 'Maximum number of evaluations which are run during the hyperparameter search (default: 10)'
-  #   required: false
-  #   default: 10
-  # target-metric:
-  #   description: 'Target metric for the evaluation. You can choose between `f1_score`, `accuracy`, `precision`, and `threshold_loss`.'
-  #   required: false
-  #   default: 'f1_score'
-  # threshold: 
-  #   description: 'Only used by `threshold_loss`. Sets the threshold which the confidence of the correct intent has to be above or wrong predictions have to be below (default: 0.8).'
-  #   required: false
-  #   default: 0.8
-  # above-below-weight:
-  #   description: 'Only used by `threshold_loss` (default: 0.5). This loss function penalizes incorrect predictions above the given threshold and correct predictions below a certain threshold. With the ABOVE_BELOW_WEIGHT you can configure the balance between these penalties. A larger value means that incorrect predictions above the threshold are penalized more heavily than correct predictions below the threshold.'
-  #   required: false
-  #   default: 0.5
 outputs:
   best-target-metric:
     description: 'best intent target metric found'
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  # volumes:
-  #   - ':${{ inputs.train-val-data }}:/data'
-  #   - ':${{ inputs.search-space }}:/nlu_hyperopt/space.py'
-  # args:
-  #   - '--build-arg MAX_EVALS=${{ inputs.max-evals }}'
-  #   - '--build-arg TARGET_METRIC=${{ inputs.target-metric }}'
-  #   - '--build-arg THRESHOLD=${{ inputs.threshold }}'
-  #   - '--build-arg ABOVE_BELOW_WEIGHT=${{ inputs.above-below-weight }}'
   
   
