@@ -168,3 +168,10 @@ l * incorrect_above + (1-l) * correct_below
 certain threshold and `correct_below` describes the fraction of correct 
 predictions below a certain threshold. Threshold and `l` can be configured 
 through environment variables.
+
+# Github Action
+
+`action.yml` defines an action that you can include in your CI/CD workflow. See `.github/workflows/nlu-hyperopt.yml` for an example of how to use this 
+action in a step. The action requires a copy of your repositories code, so you should include the [standard checkout action](https://help.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#using-the-checkout-action) first.
+
+You can configure all the environmental variables defined above, as well as the `SEARCH_SPACE` variable, which should point to your search space definition.
