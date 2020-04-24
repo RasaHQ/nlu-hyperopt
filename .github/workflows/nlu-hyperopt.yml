@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: RasaHQ/nlu-hyperopt@rasa-1-compat
       name: Run NLU Hyperoptimization
-      inputs:
+      with:
         max-evals: 1
         target-metric: f1_score
         data-directory: $GITHUB_WORKSPACE/data
