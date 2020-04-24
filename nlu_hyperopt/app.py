@@ -4,7 +4,16 @@ import os
 import logging
 import sys
 
-from nlu_hyperopt.space import search_space
+input_search_space = os.environ.get("INPUT_SEARCH_SPACE")
+if input_search_space:
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("nlu_hyperopt.space", input_search_space)
+    space = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(space)
+    search_space = space.search_space
+
+else:
+    from nlu_hyperopt.space import search_space
 
 logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 

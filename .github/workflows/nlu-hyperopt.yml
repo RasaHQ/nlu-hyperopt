@@ -11,7 +11,7 @@ jobs:
     - uses: RasaHQ/nlu-hyperopt@rasa-1-compat
       name: Run NLU Hyperoptimization
       inputs:
-        MAX_EVALS: 1
-        TARGET_METRIC: f1_score
-        DATA_DIR: $GITHUB_WORKSPACE/data
-        SEARCH_SPACE: $GITHUB_WORKSPACE/nlu_hyperopt/space.py
+        max-evals: 1
+        target-metric: f1_score
+        data-directory: $GITHUB_WORKSPACE/data
+        search-space: $GITHUB_WORKSPACE/nlu_hyperopt/space.py
