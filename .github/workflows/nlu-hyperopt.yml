@@ -6,6 +6,8 @@ jobs:
   nlu-hyperopt:
     name: NLU hyperparameter optimization
     runs-on: ubuntu-latest
+    outputs:
+      best_config: ${{ steps.nluhyperopt.outputs.best_config }}
     steps:
     - uses: actions/checkout@v2
     - uses: RasaHQ/nlu-hyperopt@rasa-1-compat
@@ -17,5 +19,5 @@ jobs:
         data_directory: ${{ github.workspace }}/data
         search_space: ${{ github.workspace }}/nlu_hyperopt/space.py
     - run: |
-          echo steps.nluhyperopt.outputs.best_config
+          echo ${{ steps.nluhyperopt.outputs.best_config }}
       

@@ -18,6 +18,6 @@ RUN chown root /entrypoint.sh && chmod +x /entrypoint.sh
 
 ENV PYTHONPATH "/"
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["python"]
 
 CMD ["-m", "nlu_hyperopt.app"]

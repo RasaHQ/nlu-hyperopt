@@ -14,7 +14,7 @@ def import_space(input_search_space):
     space = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(space)
     return space.search_space
-    
+
 input_search_space = os.environ.get("INPUT_SEARCH_SPACE")
 if input_search_space:
     search_space = import_space(input_search_space)
@@ -73,4 +73,4 @@ if __name__ == "__main__":
     with open(os.path.join(data_dir, "template_config.yml")) as f:
         config_yml = f.read().format(**best_config)
         logger.info("The best configuration is: \n{}\n".format(config_yml))
-        print(config_yml)
+        os.system('echo "::set-output name=best_config::config"') ## For github action
