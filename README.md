@@ -9,6 +9,8 @@ This is based on a template
 For local development, you can run this without docker or mongodb for fast 
 debugging.
 
+This repo also includes a [Github action](#github-action) for running nlu-hyperopt in a workflow.  
+
 ## Installation
 
 ### Development
@@ -171,7 +173,48 @@ through environment variables.
 
 # Github Action
 
-`action.yml` defines an action that you can include in your CI/CD workflow. See `.github/workflows/nlu-hyperopt.yml` for an example of how to use this 
-action in a step. The action requires a copy of your repositories code, so you should include the [standard checkout action](https://help.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#using-the-checkout-action) first.
+> Take note of Github Action's [usage limit](https://help.github.com/en/actions/getting-started-with-github-actions/about-github-actions#usage-limits)
+of 360 minutes per job. Keep this in mind when choosing `max_evals`.
 
-You can configure all the environmental variables defined above, as well as the `INPUT_SEARCH_SPACE` variable, which should point to your search space definition.
+## Inputs
+
+### search_space
+**Required** Path to your search space definition (`space.py`)
+
+### data_directory
+see `INPUT_DATA_DIRECTORY`
+
+### max_evals
+see `INPUT_MAX_EVALS`
+
+### target_metric
+see `INPUT_TARGET_METRIC`
+
+### threshold
+see `INPUT_THRESHOLD`
+
+### above_below_weight
+see `INPUT_ABOVE_BELOW_WEIGHT`
+
+## Example usage
+
+```
+name: main
+on: [pull_request]
+
+jobs:
+  nlu-hyperopt:
+    name: NLU hyperparameter optimization
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: RasaHQ/nlu-hyperopt@v1
+      name: Run NLU Hyperoptimization
+      with:
+        max_evals: 50
+        target_metric: f1_score
+        data_directory: ${{ github.workspace }}/data
+        search_space: ${{ github.workspace }}/nlu_hyperopt/space.py
+
+```
+

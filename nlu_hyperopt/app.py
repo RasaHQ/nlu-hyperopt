@@ -6,12 +6,7 @@ import sys
 
 input_search_space = os.environ.get("INPUT_SEARCH_SPACE")
 if input_search_space:
-    import importlib.util
-    spec = importlib.util.spec_from_file_location("nlu_hyperopt.space", input_search_space)
-    space = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(space)
-    search_space = space.search_space
-
+    search_space = import_space(input_search_space)
 else:
     from nlu_hyperopt.space import search_space
 
@@ -19,6 +14,16 @@ logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 
 logger = logging.getLogger(__name__)
 
+def import_space(input_search_space):
+    """ Imports search_space from an absolute path.
+        This is used when running as a Github Action, where space.py
+        can't be copied into the directory before building the docker image
+    """
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("nlu_hyperopt.space", input_search_space)
+    space = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(space)
+    return space.search_space
 
 def worker_function(space):
     """This function is pickled and transferred to the workers.
