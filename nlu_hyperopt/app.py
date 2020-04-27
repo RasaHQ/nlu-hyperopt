@@ -73,4 +73,9 @@ if __name__ == "__main__":
     with open(os.path.join(data_dir, "template_config.yml")) as f:
         config_yml = f.read().format(**best_config)
         logger.info("The best configuration is: \n{}\n".format(config_yml))
+
+        config_yml=config_yml.replace('%','%25') ## github actions does not handle multiline outputs properly
+        config_yml=config_yml.replace('\n','%0A')
+        config_yml=config_yml.replace('\r','%0D')
+
         print(f"::set-output name=best_config::{config_yml}") ## For github action
