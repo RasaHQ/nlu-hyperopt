@@ -74,8 +74,9 @@ if __name__ == "__main__":
         config_yml = f.read().format(**best_config)
         logger.info("The best configuration is: \n{}\n".format(config_yml))
 
+        ## For github action
         config_yml=config_yml.replace('%','%25') ## github actions does not handle multiline outputs properly
-        config_yml=config_yml.replace('\n','%0A')
+        config_yml=config_yml.replace('\n','%0A') ## https://github.community/t5/GitHub-Actions/set-output-Truncates-Multiline-Strings/td-p/37870
         config_yml=config_yml.replace('\r','%0D')
 
-        print(f"::set-output name=best_config::{config_yml}") ## For github action
+        print(f'::set-output name=best_config::"{config_yml}"')
