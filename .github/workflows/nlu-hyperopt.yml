@@ -20,4 +20,5 @@ jobs:
         search_space: ${{ github.workspace }}/nlu_hyperopt/space.py
     - run: |
           echo ${{ steps.nluhyperopt.outputs.best_config }}
+          echo ${{ steps.nluhyperopt.outputs.all }}
       
