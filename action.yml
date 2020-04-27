@@ -25,6 +25,9 @@ inputs:
     description: 'Only used by `threshold_loss` (default: 0.5). This loss function penalizes incorrect predictions above the given threshold and correct predictions below a certain threshold. With the ABOVE_BELOW_WEIGHT you can configure the balance between these penalties. A larger value means that incorrect predictions above the threshold are penalized more heavily than correct predictions below the threshold.'
     required: false
     default: 0.5
+outputs:
+  best_config:
+    description: 'Best configuration found'
 runs:
   using: 'docker'
   image: 'Dockerfile'
