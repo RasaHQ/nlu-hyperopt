@@ -199,9 +199,6 @@ see `INPUT_ABOVE_BELOW_WEIGHT`
 ## Example usage
 
 ```
-name: main
-on: [pull_request]
-
 jobs:
   nlu-hyperopt:
     name: NLU hyperparameter optimization
