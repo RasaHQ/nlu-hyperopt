@@ -1,4 +1,4 @@
-#! /bin/bash 
+#!/bin/bash 
 su
 
 echo $INPUT_MAX_EVALS
