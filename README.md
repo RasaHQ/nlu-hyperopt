@@ -178,23 +178,12 @@ of 360 minutes per job. Keep this in mind when choosing `max_evals`.
 
 ## Inputs
 
-### search_space
-**Required** Path to your search space definition (`space.py`)
-
-### data_directory
-see `INPUT_DATA_DIRECTORY`
-
-### max_evals
-see `INPUT_MAX_EVALS`
-
-### target_metric
-see `INPUT_TARGET_METRIC`
-
-### threshold
-see `INPUT_THRESHOLD`
-
-### above_below_weight
-see `INPUT_ABOVE_BELOW_WEIGHT`
+- `search_space`: **Required** Path to your search space definition (`space.py`)
+- `data_directory`:  **Required** see `INPUT_DATA_DIRECTORY`
+- `max_evals`: see `INPUT_MAX_EVALS`
+- `target_metric`: see `INPUT_TARGET_METRIC`
+- `threshold`: see `INPUT_THRESHOLD`
+- `above_below_weight`: see `INPUT_ABOVE_BELOW_WEIGHT`
 
 ## Example usage
 

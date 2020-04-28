@@ -1,5 +1,5 @@
 
-name: main
+name: nlu-hyperopt
 on: [pull_request]
 
 jobs:
