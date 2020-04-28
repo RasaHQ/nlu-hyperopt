@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 
 name: nlu-hyperopt
+=======
+name: main
+>>>>>>> 42f2456421bd3fd1bfe002f21dd0424c4656805d
 on: [pull_request]
 
 jobs:
@@ -18,4 +22,5 @@ jobs:
         target_metric: f1_score
         data_directory: ${{ github.workspace }}/data
         search_space: ${{ github.workspace }}/nlu_hyperopt/space.py
+
     
