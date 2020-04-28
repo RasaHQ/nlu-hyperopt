@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-
 name: nlu-hyperopt
-=======
-name: main
->>>>>>> 42f2456421bd3fd1bfe002f21dd0424c4656805d
 on: [pull_request]
 
 jobs:
