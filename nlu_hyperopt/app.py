@@ -5,7 +5,7 @@ import logging
 import sys
 
 
-running_as_action = os.environ.get("RUNNING_AS_ACTION",False)
+running_as_action = os.environ.get("RUNNING_AS_ACTION", False)
 
 def import_space(input_search_space):
     """ Imports search_space from an absolute path.

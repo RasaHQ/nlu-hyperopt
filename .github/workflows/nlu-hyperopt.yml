@@ -17,5 +17,3 @@ jobs:
         target_metric: f1_score
         data_directory: ${{ github.workspace }}/data
         search_space: ${{ github.workspace }}/nlu_hyperopt/space.py
-
-    

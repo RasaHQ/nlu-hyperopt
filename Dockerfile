@@ -1,4 +1,4 @@
-FROM rasa/rasa:1.9.7-full
+FROM rasa/rasa:1.10.0-full
 
 COPY setup.py .
 COPY requirements.txt .
