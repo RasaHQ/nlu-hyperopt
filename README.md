@@ -9,6 +9,8 @@ This is based on a template
 For local development, you can run this without docker or mongodb for fast 
 debugging.
 
+This repo also includes a [Github action](#github-action) for running nlu-hyperopt in a workflow.  
+
 ## Installation
 
 ### Development
@@ -51,7 +53,7 @@ Save this at `data/template_config.yml`
 
 ### Step 2: Define a Search Space
 
-You need to define a search space in the `hyperopt/space.py` file.
+You need to define a search space in the `nlu_hyperopt/space.py` file.
 
 ```
 from hyperopt import hp
@@ -69,7 +71,7 @@ for details on how to define a space.
 
 ### Step 3: Provide Your Training and Test data
 
-Put your training and test data in `data/{train, test}.md`
+Put your training and test data in `data/{train, validation}.md`
 You can do a train-test split in Rasa NLU with:
 
 ```
@@ -89,12 +91,12 @@ environment variables:
 
 | Environment Variable | Description                                                                                                                                                                                                                                                                                                                                                                                                |
 |----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| MAX_EVALS            | Maximum number of evaluations which are run during the hyperparameter search                                                                                                                                                                                                                                                                                                                               |
-| DATA_DIRECTORY       | Directory which contains the files `train.md`,`validation.md`, and `template_config.yml` (default: `./data`)                                                                                                                                                                                                                                                                                                     |
-| MODEL_DIRECTORY      | Directory which contains the trained models (default: `./models`)                                                                                                                                                                                                                                                                                                                                           |
-| TARGET_METRIC        | Target metric for the evaluation. You can choose between `f1_score`, `accuracy`, `precision`, and `threshold_loss`.                                                                                                                                                                                                                                                                                        |
-| THRESHOLD            | Only used by `threshold_loss`. Sets the threshold which the confidence of the correct intent has to be above or wrong predictions have to be below (default: 0.8).                                                                                                                                                                                                                                         |
-| ABOVE\_BELOW\_WEIGHT | Only used by `threshold_loss` (default: 0.5). This loss function penalizes incorrect predictions above the given threshold and correct predictions below a certain threshold. With the `ABOVE_BELOW_WEIGHT` you can configure the balance between these penalties. A larger value means that incorrect predictions above the threshold are penalized more heavily than correct predictions below the threshold. |
+| INPUT_MAX_EVALS            | Maximum number of evaluations which are run during the hyperparameter search                                                                                                                                                                                                                                                                                                                               |
+| INPUT_DATA_DIRECTORY       | Directory which contains the files `train.md`,`validation.md`, and `template_config.yml` (default: `./data`)                                                                                                                                                                                                                                                                                                     |
+| INPUT_MODEL_DIRECTORY      | Directory which contains the trained models (default: `./models`)                                                                                                                                                                                                                                                                                                                                           |
+| INPUT_TARGET_METRIC        | Target metric for the evaluation. You can choose between `f1_score`, `accuracy`, `precision`, and `threshold_loss`.                                                                                                                                                                                                                                                                                        |
+| INPUT_THRESHOLD            | Only used by `threshold_loss`. Sets the threshold which the confidence of the correct intent has to be above or wrong predictions have to be below (default: 0.8).                                                                                                                                                                                                                                         |
+| INPUT_ABOVE\_BELOW\_WEIGHT | Only used by `threshold_loss` (default: 0.5). This loss function penalizes incorrect predictions above the given threshold and correct predictions below a certain threshold. With the `ABOVE_BELOW_WEIGHT` you can configure the balance between these penalties. A larger value means that incorrect predictions above the threshold are penalized more heavily than correct predictions below the threshold. |
 
 ## Step 5: Start your experiment
 
@@ -113,9 +115,9 @@ Set the experiment name and max evaluations in your `.env` file
 Here is an example:
 
 ```
-EXPERIMENT_KEY=default-experiment
-MAX_EVALS=100
-MONGO_URL=mongodb:27017/nlu-hyperopt
+INPUT_EXPERIMENT_KEY=default-experiment
+INPUT_MAX_EVALS=100
+INPUT_MONGO_URL=mongodb:27017/nlu-hyperopt
 ```
 
 To run:
@@ -134,7 +136,11 @@ To see the results while the optimization is running, open a mongo shell session
 
 Run this command to see the experiment with the lowest value of the loss so far
 
-`db.jobs.find({"exp_key" : "default-experiment", "result.loss":{$exists: 1}}).sort({"result.loss": 1}).limit(1).pretty()`
+
+```
+use nlu-hyperopt
+db.jobs.find({"exp_key" : "default-experiment", "result.loss":{$exists: 1}}).sort({"result.loss": 1}).limit(1).pretty()
+```
 
 replacing the value of the `exp_key` with your experiment name.
 
@@ -142,19 +148,19 @@ replacing the value of the `exp_key` with your experiment name.
 # Loss Functions
 
 ## f1_score
-This is loss is defined as `1 - f`, where `f` is the f1 score of the intent 
+This loss is defined as `1 - f`, where `f` is the f1 score of the intent 
 evaluation on your test data.
 
 ## accuracy
-This is loss is defined as `1 - f`, where `f` is the accuracy score of the 
+This loss is defined as `1 - f`, where `f` is the accuracy score of the 
 intent evaluation on your test data.
 
 ## precision
-This is loss is defined as `1 - f`, where `f` is the precision score of the 
+This loss is defined as `1 - f`, where `f` is the precision score of the 
 intent evaluation on your test data.
 
 ## threshold_loss
-This is loss is defined as 
+This loss is defined as 
 ```
 l * incorrect_above + (1-l) * correct_below
 ```
@@ -164,3 +170,36 @@ l * incorrect_above + (1-l) * correct_below
 certain threshold and `correct_below` describes the fraction of correct 
 predictions below a certain threshold. Threshold and `l` can be configured 
 through environment variables.
+
+# Github Action
+
+> Take note of Github Action's [usage limit](https://help.github.com/en/actions/getting-started-with-github-actions/about-github-actions#usage-limits)
+of 360 minutes per job. Keep this in mind when choosing `max_evals`.
+
+## Inputs
+
+- `search_space`: **Required** Path to your search space definition (`space.py`)
+- `data_directory`:  **Required** see `INPUT_DATA_DIRECTORY`
+- `max_evals`: see `INPUT_MAX_EVALS`
+- `target_metric`: see `INPUT_TARGET_METRIC`
+- `threshold`: see `INPUT_THRESHOLD`
+- `above_below_weight`: see `INPUT_ABOVE_BELOW_WEIGHT`
+
+## Example usage
+
+```
+jobs:
+  nlu-hyperopt:
+    name: NLU hyperparameter optimization
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: RasaHQ/nlu-hyperopt@v1
+      name: Run NLU Hyperoptimization
+      with:
+        max_evals: 50
+        target_metric: f1_score
+        data_directory: ${{ github.workspace }}/data
+        search_space: ${{ github.workspace }}/nlu_hyperopt/space.py
+
+```

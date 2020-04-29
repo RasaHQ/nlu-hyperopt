@@ -1,14 +1,18 @@
-FROM rasa/rasa_nlu:latest-full
+FROM rasa/rasa:1.10.0-full
 
+COPY setup.py .
 COPY requirements.txt .
 COPY data /data
 COPY nlu_hyperopt /nlu_hyperopt
 COPY scripts /scripts
 
-RUN pip install -r requirements.txt && chmod -R +x /scripts
+# Be root
+USER root
 
-ENTRYPOINT []
+RUN pip install -U pip && pip install -r requirements.txt && chmod -R +x /scripts  
 
-WORKDIR "/"
+ENV PYTHONPATH "/"
 
-CMD ["python", "-m", "nlu_hyperopt.app"]
+ENTRYPOINT ["python"]
+
+CMD ["-m", "nlu_hyperopt.app"]

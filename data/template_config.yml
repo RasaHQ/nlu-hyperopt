@@ -4,6 +4,7 @@
 
 language: en
 pipeline:
-- name: "intent_featurizer_count_vectors"
-- name: "intent_classifier_tensorflow_embedding"
+- name: "WhitespaceTokenizer"
+- name: "CountVectorsFeaturizer"
+- name: "DIETClassifier"
   epochs: {epochs}
