@@ -1,10 +1,10 @@
-FROM rasa/rasa:1.9.6-full
+FROM rasa/rasa:1.9.7-full
 
 COPY setup.py .
 COPY requirements.txt .
-COPY data ./scripts
-COPY nlu_hyperopt ./scripts
-COPY scripts ./scripts
+COPY data /data
+COPY nlu_hyperopt /nlu_hyperopt
+COPY scripts /scripts
 
 # Be root
 USER root
