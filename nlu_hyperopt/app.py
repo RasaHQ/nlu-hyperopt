@@ -4,6 +4,8 @@ import os
 import logging
 import sys
 
+running_as_action = os.environ.get("RUNNING_AS_ACTION",False)
+
 def import_space(input_search_space):
     """ Imports search_space from an absolute path.
         This is used when running as a Github Action, where space.py
@@ -73,9 +75,9 @@ if __name__ == "__main__":
         config_yml = f.read().format(**best_config)
         logger.info("The best configuration is: \n{}\n".format(config_yml))
 
-        # For github action
-        config_yml=config_yml.replace('%','%25') ## github actions does not handle multiline outputs properly
-        config_yml=config_yml.replace('\n','%0A') ## https://github.community/t5/GitHub-Actions/set-output-Truncates-Multiline-Strings/td-p/37870
-        config_yml=config_yml.replace('\r','%0D')
+        if running_as_action:
+            config_yml=config_yml.replace('%','%25') ## github actions does not handle multiline outputs properly
+            config_yml=config_yml.replace('\n','%0A') ## https://github.community/t5/GitHub-Actions/set-output-Truncates-Multiline-Strings/td-p/37870
+            config_yml=config_yml.replace('\r','%0D')
 
-        print(f'::set-output name=best_config::"{config_yml}"')
+            print(f'::set-output name=best_config::"{config_yml}"')

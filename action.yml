@@ -31,4 +31,6 @@ outputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  env: 
+    RUNNING_AS_ACTION: true
   
