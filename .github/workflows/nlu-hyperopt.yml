@@ -9,7 +9,7 @@ jobs:
       best_config: ${{ steps.nluhyperopt.outputs.best_config }}
     steps:
     - uses: actions/checkout@v2
-    - uses: RasaHQ/nlu-hyperopt@rasa-1-compat
+    - uses: RasaHQ/nlu-hyperopt@v1
       id: nluhyperopt
       name: Run NLU Hyperoptimization
       with:
