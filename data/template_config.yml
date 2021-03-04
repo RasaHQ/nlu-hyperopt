@@ -5,13 +5,5 @@ language: en
 pipeline:
 - name: "WhitespaceTokenizer"
 - name: "CountVectorsFeaturizer"
-  analyzer: char_wb
-  max_df: {max_df}
-  min_ngram: 1
-  max_ngram: {max_ngrams} 
 - name: "DIETClassifier"
   epochs: {epochs}
-- name: "ResponseSelector"
-  epochs: 200
-- name: RegexFeaturizer
-- name: EntitySynonymMapper
