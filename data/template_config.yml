@@ -1,10 +1,17 @@
 # This file contains your NLU pipeline configuration.
 # Replace parameters which you want to optimize with their name in 
 # curly brackets, e.g. `"epochs": 100` becomes `"epochs": {epochs}`.
-
 language: en
 pipeline:
 - name: "WhitespaceTokenizer"
 - name: "CountVectorsFeaturizer"
+  analyzer: char_wb
+  max_df: {max_df}
+  min_ngram: 1
+  max_ngram: {max_ngrams} 
 - name: "DIETClassifier"
   epochs: {epochs}
+- name: "ResponseSelector"
+  epochs: 200
+- name: RegexFeaturizer
+- name: EntitySynonymMapper
