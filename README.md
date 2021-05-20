@@ -37,7 +37,7 @@ data.
 Here is an example. Replace the parameters you want to search over with 
 variable names:
 
-```
+```yaml
 language: en
 pipeline:
 - name: "intent_featurizer_count_vectors"
@@ -55,7 +55,7 @@ Save this at `data/template_config.yml`
 
 You need to define a search space in the `nlu_hyperopt/space.py` file.
 
-```
+```python
 from hyperopt import hp
 
 search_space = {
@@ -74,7 +74,7 @@ for details on how to define a space.
 Put your training and test data in `data/{train, validation}.md`
 You can do a train-test split in Rasa NLU with:
 
-```
+```python
 from rasa_nlu.training_data import load_data
 data = load_data('all_my_data.md')
 train, test = data.train_test_split(train_frac=0.7)
@@ -187,7 +187,7 @@ of 360 minutes per job. Keep this in mind when choosing `max_evals`.
 
 ## Example usage
 
-```
+```yaml
 jobs:
   nlu-hyperopt:
     name: NLU hyperparameter optimization
