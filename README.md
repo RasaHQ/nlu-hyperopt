@@ -60,7 +60,7 @@ from hyperopt import hp
 from hyperopt.pyll.base import scope
 
 search_space = {
-    "epochs": hp.qloguniform("epochs", 0, 4, 2),
+    'epochs': hp.qloguniform('epochs', 0, 4, 2),
     'max_df': hp.uniform('max_df', 1, 2),
     'max_ngrams': scope.int(hp.quniform('max_ngram', 3, 9, 1))
     }
