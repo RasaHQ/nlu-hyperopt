@@ -57,11 +57,13 @@ You need to define a search space in the `nlu_hyperopt/space.py` file.
 
 ```python
 from hyperopt import hp
+from hyperopt.pyll.base import scope
 
 search_space = {
     'epochs': hp.qloguniform('epochs', 0, 4, 2),
-    'max_df': hp.uniform('max_df', 0.01, 1.0),
-    'max_ngrams': hp.quniform('max_ngram', 3, 9, 1)
+    'max_df': hp.uniform('max_df', 1, 2),
+    'max_ngrams': scope.int(hp.quniform('max_ngram', 3, 9, 1))
+    }
 }
 ```
 

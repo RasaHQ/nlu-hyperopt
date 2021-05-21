@@ -1,7 +1,6 @@
 # This file contains your NLU pipeline configuration.
 # Replace parameters which you want to optimize with their name in 
 # curly brackets, e.g. `"epochs": 100` becomes `"epochs": {epochs}`.
-
 language: en
 pipeline:
 - name: "WhitespaceTokenizer"
