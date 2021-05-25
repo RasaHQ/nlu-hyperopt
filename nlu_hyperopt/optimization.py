@@ -1,7 +1,9 @@
+import asyncio
+
 from hyperopt import STATUS_OK, STATUS_FAIL
-from rasa.nlu.training_data import load_data
+from rasa.shared.nlu.training_data.loading import load_data
 from rasa.nlu.config import RasaNLUModelConfig
-from rasa.utils.io import read_yaml
+from rasa.shared.utils.io import read_yaml
 from rasa.nlu.test import run_evaluation
 from rasa.nlu.model import Trainer
 import rasa
@@ -34,6 +36,8 @@ def run_trial(space):
     # The epoch has to be an int since `tqdm` otherwise will cause an exception.
     if "epochs" in space:
         space["epochs"] = int(space["epochs"])
+    if "max_ngram" in space:
+        space["max_ngram"] = int(space["max_ngram"])
 
     with open(os.path.join(data_dir, "template_config.yml")) as f:
         config_yml = f.read().format(**space)
@@ -41,8 +45,8 @@ def run_trial(space):
         config = rasa.nlu.config.load(config)
 
     trainer = Trainer(config)
-    training_data = load_data(os.path.join(data_dir, "train.md"))
-    test_data_path = os.path.join(data_dir, "validation.md")
+    training_data = load_data(os.path.join(data_dir, "training_data.yml"))
+    test_data_path = os.path.join(data_dir, "test_data.yml")
 
     # wrap in train and eval in try/except in case
     # nlu_hyperopt proposes invalid combination of params
@@ -65,7 +69,9 @@ def run_trial(space):
 
 def _get_nlu_evaluation_loss(model_path, metric, data_path):
     logger.info("Calculating '{}' loss.".format(metric))
-    evaluation_result = run_evaluation(data_path, model_path)
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    evaluation_result = loop.run_until_complete(run_evaluation(data_path, model_path))
     metric_result = evaluation_result['intent_evaluation'][metric]
     logger.info("{}: {}".format(metric, metric_result))
     
