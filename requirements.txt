@@ -1,3 +1,6 @@
-hyperopt==0.2.3
+cloudpickle==1.2
+numpy==1.19.5
+protobuf==3.20.0
+hyperopt==0.2.7
 flask
 dill
