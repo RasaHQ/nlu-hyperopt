@@ -17,8 +17,8 @@ AVAILABLE_METRICS = ["f1_score", "accuracy", "precision", "threshold_loss"]
 
 
 class Model:
-    """Class inspired by rasa/nlu/run.py for loading the model and parsing
-    messages
+    """Class inspired by rasa/nlu/run.py for loading the model and 
+       parsing messages
     """
     def __init__(self, model_path: str) -> None:
         self.agent = Agent.load(model_path)
@@ -81,7 +81,8 @@ def run_trial(space):
                                             target_metric,
                                             test_data_path)
 
-        # Removing temporary config file and rasa cache
+        # Removing temporary config file and rasa cache to start fresh in 
+        # next training
         os.remove(config_path)
         shutil.rmtree('.rasa')
 
