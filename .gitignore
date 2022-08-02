@@ -3,3 +3,4 @@ errors.json
 __pycache__
 models
 tmp
+.rasa
