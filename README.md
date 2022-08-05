@@ -73,17 +73,14 @@ for details on how to define a space.
 
 ### Step 3: Provide Your Training and Test data
 
-Put your training and test data in `data/{train, validation}.md`
+Put your training and test data in `train_test_split/{training_data, test_data}.yml`
 You can do a train-test split in Rasa NLU with:
 
-```python
-from rasa_nlu.training_data import load_data
-data = load_data('all_my_data.md')
-train, test = data.train_test_split(train_frac=0.7)
+```sh
+rasa data split nlu
 ```
 
-and you can write markdown by writing the output of `train.as_markdown()` to a 
-file.
+You can specify a non-default `--training-fraction` as a decimal; the default is `0.8`.
 
 
 ## Step 4: Configure your experiment
@@ -94,7 +91,7 @@ environment variables:
 | Environment Variable | Description                                                                                                                                                                                                                                                                                                                                                                                                |
 |----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | INPUT_MAX_EVALS            | Maximum number of evaluations which are run during the hyperparameter search                                                                                                                                                                                                                                                                                                                               |
-| INPUT_DATA_DIRECTORY       | Directory which contains the files `train.md`,`validation.md`, and `template_config.yml` (default: `./data`)                                                                                                                                                                                                                                                                                                     |
+| INPUT_DATA_DIRECTORY       | Directory which contains the files `training_data.yml`,`test_data.yml`, and `template_config.yml` (default: `./train_test_split`)                                                                                                                                                                                                                                                                                                     |
 | INPUT_MODEL_DIRECTORY      | Directory which contains the trained models (default: `./models`)                                                                                                                                                                                                                                                                                                                                           |
 | INPUT_TARGET_METRIC        | Target metric for the evaluation. You can choose between `f1_score`, `accuracy`, `precision`, and `threshold_loss`.                                                                                                                                                                                                                                                                                        |
 | INPUT_THRESHOLD            | Only used by `threshold_loss`. Sets the threshold which the confidence of the correct intent has to be above or wrong predictions have to be below (default: 0.8).                                                                                                                                                                                                                                         |

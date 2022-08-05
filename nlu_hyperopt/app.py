@@ -41,6 +41,12 @@ def worker_function(space):
 if __name__ == "__main__":
     # This function is run by the `nlu_hyperopt-master` and coordinates the
     # hyperparameter search.
+
+    # Example for testing a single iteration
+    # from nlu_hyperopt.optimization import run_trial
+    # space = {'epochs': '10'}
+    # run_trial(space)
+
     exp_key = os.environ.get("INPUT_EXP_KEY", "default")
     mongo_url = os.environ.get("INPUT_MONGO_URL")
 

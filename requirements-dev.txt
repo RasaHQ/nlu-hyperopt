@@ -1,2 +1,0 @@
--r requirements.txt
-rasa==1.10.0
