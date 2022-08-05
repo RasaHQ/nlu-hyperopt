@@ -7,8 +7,9 @@ inputs:
     for details on how to define a space.'
     required: true
   data_directory: 
-    description: 'Directory which contains the files `train.md`,`validation.md`, and `template_config.yml`'
+    description: 'Directory which contains the files `training_data.yml`,`test_data.yml`, and `template_config.yml`'
     required: true
+    default: train_test_split
   max_evals:
     description: 'Maximum number of evaluations which are run during the hyperparameter search (default: 10)'
     required: false
