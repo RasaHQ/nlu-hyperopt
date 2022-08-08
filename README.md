@@ -198,7 +198,7 @@ jobs:
       with:
         max_evals: 50
         target_metric: f1_score
-        data_directory: ${{ github.workspace }}/data
+        data_directory: ${{ github.workspace }}/train_test_split
         search_space: ${{ github.workspace }}/nlu_hyperopt/space.py
 
 ```
