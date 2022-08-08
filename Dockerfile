@@ -1,8 +1,8 @@
-FROM rasa/rasa:1.10.0-full
+FROM rasa/rasa:3.2.4-full
 
 COPY setup.py .
 COPY requirements.txt .
-COPY data /data
+COPY train_test_split /train_test_split
 COPY nlu_hyperopt /nlu_hyperopt
 COPY scripts /scripts
 
